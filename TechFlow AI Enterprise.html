@@ -1,0 +1,3177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFlow AI - Enterprise Work Management Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #3b82f6; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .glow-effect {
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid #3b82f6;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
+        }
+        
+        .status-online { 
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .status-busy { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .status-offline { 
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .neural-network {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+        }
+        
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+        }
+        
+        .slide {
+            display: none;
+            animation: fadeInUp 0.5s ease-in-out;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+        
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+        
+        .ai-thinking {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradient 4s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .holographic {
+            background: linear-gradient(45deg, 
+                rgba(0, 255, 255, 0.1) 0%,
+                rgba(255, 0, 255, 0.1) 25%,
+                rgba(255, 255, 0, 0.1) 50%,
+                rgba(0, 255, 255, 0.1) 75%,
+                rgba(255, 0, 255, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: particle-float 8s infinite linear;
+        }
+        
+        @keyframes particle-float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .code-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        .matrix-char {
+            position: absolute;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            animation: matrix-fall 10s linear infinite;
+        }
+        
+        @keyframes matrix-fall {
+            0% { transform: translateY(-100px); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white neural-network">
+    <!-- Matrix Code Rain Background -->
+    <div class="code-rain" id="matrixRain"></div>
+    
+    <!-- Floating Particles -->
+    <div id="particleContainer"></div>
+    <!-- Advanced Header -->
+    <header class="glass-morphism border-b border-white/10 p-4 relative z-10" data-aos="fade-down">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center glow-effect floating">
+                    <i class="fas fa-brain text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        TechFlow AI Enterprise
+                    </h1>
+                    <p class="text-sm text-gray-300 typing-effect">Next-Generation Work Management Platform</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- AI Status Indicator -->
+                <div class="flex items-center space-x-2 bg-black/30 rounded-full px-4 py-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full pulse-animation"></div>
+                    <span class="text-sm font-medium">GPT-4 Turbo Active</span>
+                    <div class="w-2 h-2 bg-blue-400 rounded-full animate-ping"></div>
+                </div>
+                
+                <!-- Real-time Metrics -->
+                <div class="hidden md:flex items-center space-x-4 text-sm">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                        <span id="realtimeMetric">98.7% Uptime</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-clock text-blue-400"></i>
+                        <span id="currentTime"></span>
+                    </div>
+                </div>
+                
+                <!-- Advanced Controls -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                        <i class="fas fa-palette"></i>
+                    </button>
+                    <button onclick="showAISettings()" class="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-colors">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- AI Capabilities Showcase Slideshow -->
+        <div class="mb-8" data-aos="fade-up">
+            <div class="slideshow-container glass-morphism rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                        <i class="fas fa-robot mr-2"></i>AI Capabilities Showcase
+                    </h2>
+                    <div class="flex space-x-2">
+                        <button onclick="previousSlide()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button onclick="nextSlide()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="toggleAutoplay()" class="p-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition-colors" id="autoplayBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Slide 1: Advanced Analytics -->
+                <div class="slide active">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-bold text-cyan-400">🧠 Advanced AI Analytics</h3>
+                            <p class="text-gray-300">Our GPT-4 Turbo powered analytics engine processes millions of data points to provide unprecedented insights into team performance, project outcomes, and resource optimization.</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Real-time performance prediction with 94.7% accuracy</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Automated bottleneck detection and resolution suggestions</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Predictive resource allocation optimization</span>
+                                </div>
+                            </div>
+                            <button onclick="demoAnalytics()" class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-play mr-2"></i>See Live Demo
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <div class="chart-container bg-black/30 rounded-xl p-4">
+                                <canvas id="analyticsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2: AI Assistant -->
+                <div class="slide">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-bold text-purple-400">🤖 Intelligent AI Assistant</h3>
+                            <p class="text-gray-300">Powered by the latest GPT-4 Turbo with function calling, our AI assistant understands context, learns from your data, and provides actionable insights in natural language.</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Natural language query processing</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Context-aware recommendations</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Multi-modal analysis (text, data, trends)</span>
+                                </div>
+                            </div>
+                            <button onclick="demoAIChat()" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-comments mr-2"></i>Try AI Chat
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-black/30 rounded-xl p-4 h-64 overflow-hidden">
+                                <div class="ai-thinking h-full rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <i class="fas fa-brain text-4xl mb-4 animate-pulse"></i>
+                                        <p class="text-lg font-medium">AI Processing...</p>
+                                        <div class="mt-4 flex justify-center space-x-1">
+                                            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                                            <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                            <div class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3: Video Demo -->
+                <div class="slide">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-green-400 text-center">🎥 Platform Demo Video</h3>
+                        <div class="video-container">
+                            <div class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fas fa-play-circle text-6xl text-blue-400 mb-4"></i>
+                                    <p class="text-xl font-medium">Interactive Platform Demo</p>
+                                    <p class="text-gray-400 mt-2">See TechFlow AI in action with real-world scenarios</p>
+                                    <button onclick="playDemo()" class="mt-4 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                        <i class="fas fa-play mr-2"></i>Play Demo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4: Real-time Collaboration -->
+                <div class="slide">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-bold text-yellow-400">⚡ Real-time Collaboration</h3>
+                            <p class="text-gray-300">Experience seamless real-time collaboration with AI-powered suggestions, automated workflows, and intelligent task distribution across your entire team.</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Live collaborative editing and updates</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>AI-powered conflict resolution</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    <span>Smart notification and priority management</span>
+                                </div>
+                            </div>
+                            <button onclick="demoCollaboration()" class="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-users mr-2"></i>Experience Collaboration
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-black/30 rounded-xl p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3 animate-pulse">
+                                        <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
+                                        <div class="flex-1 bg-blue-500/20 h-4 rounded"></div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 animate-pulse" style="animation-delay: 0.5s">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full"></div>
+                                        <div class="flex-1 bg-green-500/20 h-4 rounded"></div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 animate-pulse" style="animation-delay: 1s">
+                                        <div class="w-8 h-8 bg-purple-500 rounded-full"></div>
+                                        <div class="flex-1 bg-purple-500/20 h-4 rounded"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide Indicators -->
+                <div class="flex justify-center space-x-2 mt-6">
+                    <button onclick="currentSlide(1)" class="slide-indicator active w-3 h-3 rounded-full bg-blue-500"></button>
+                    <button onclick="currentSlide(2)" class="slide-indicator w-3 h-3 rounded-full bg-gray-500"></button>
+                    <button onclick="currentSlide(3)" class="slide-indicator w-3 h-3 rounded-full bg-gray-500"></button>
+                    <button onclick="currentSlide(4)" class="slide-indicator w-3 h-3 rounded-full bg-gray-500"></button>
+                </div>
+            </div>
+        </div>
+        <!-- Advanced Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-morphism rounded-xl p-6 border border-white/20 holographic hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-300 text-sm font-medium">Team Members</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent" id="totalUsers">8</p>
+                    </div>
+                    <div class="w-14 h-14 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl flex items-center justify-center glow-effect">
+                        <i class="fas fa-users text-2xl text-blue-400"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-blue-400 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>5 online</span>
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                        <span>2 busy</span>
+                        <div class="w-2 h-2 bg-gray-500 rounded-full"></div>
+                        <span>1 offline</span>
+                    </div>
+                </div>
+                <div class="mt-3 w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full" style="width: 87.5%"></div>
+                </div>
+            </div>
+
+            <div class="glass-morphism rounded-xl p-6 border border-white/20 holographic hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-300 text-sm font-medium">Active Tasks</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent" id="activeTasks">10</p>
+                    </div>
+                    <div class="w-14 h-14 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center glow-effect">
+                        <i class="fas fa-tasks text-2xl text-purple-400"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-red-400 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
+                        <span>1 critical</span>
+                        <i class="fas fa-bolt text-yellow-500"></i>
+                        <span>4 high priority</span>
+                    </div>
+                </div>
+                <div class="mt-3 w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+
+            <div class="glass-morphism rounded-xl p-6 border border-white/20 holographic hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-300 text-sm font-medium">Sprint Progress</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent" id="dataUpdates">67%</p>
+                    </div>
+                    <div class="w-14 h-14 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl flex items-center justify-center glow-effect">
+                        <i class="fas fa-chart-line text-2xl text-green-400"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-yellow-400 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-clock text-yellow-500"></i>
+                        <span>8 days remaining</span>
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full animate-ping"></div>
+                    </div>
+                </div>
+                <div class="mt-3 w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style="width: 67%"></div>
+                </div>
+            </div>
+
+            <div class="glass-morphism rounded-xl p-6 border border-white/20 holographic hover:scale-105 transition-transform duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-300 text-sm font-medium">AI Insights</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">94.7%</p>
+                    </div>
+                    <div class="w-14 h-14 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl flex items-center justify-center glow-effect">
+                        <i class="fas fa-brain text-2xl text-cyan-400 animate-pulse"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-cyan-400 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-robot text-cyan-500"></i>
+                        <span>Prediction accuracy</span>
+                        <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <div class="mt-3 w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full" style="width: 94.7%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- User Management Panel -->
+            <div class="lg:col-span-2 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">User Management</h2>
+                    <button onclick="addNewUser()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        + Add User
+                    </button>
+                </div>
+
+                <div class="space-y-4" id="userList">
+                    <!-- Users will be populated here -->
+                </div>
+            </div>
+
+            <!-- Advanced AI Assistant Chat -->
+            <div class="glass-morphism rounded-xl p-6 border border-white/20 holographic" data-aos="fade-left">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <i class="fas fa-robot mr-2"></i>AI Assistant GPT-4 Turbo
+                    </h2>
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 bg-black/30 rounded-full px-3 py-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full pulse-animation"></div>
+                            <span class="text-xs text-green-400 font-medium">Connected</span>
+                        </div>
+                        <button onclick="toggleAIMode()" class="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 transition-colors">
+                            <i class="fas fa-magic text-purple-400"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-black/30 rounded-xl p-4 h-80 overflow-y-auto mb-4 border border-white/10" id="chatMessages">
+                    <div class="text-sm text-gray-300 mb-3 fade-in-up">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-brain text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-3 border border-purple-500/30">
+                                    <p class="text-white font-medium mb-1">GPT-4 Turbo Assistant</p>
+                                    <p class="text-gray-300">🚀 Welcome to TechFlow AI! I'm your advanced AI assistant powered by GPT-4 Turbo with function calling capabilities. I can:</p>
+                                    <ul class="mt-2 space-y-1 text-sm text-gray-400">
+                                        <li>• Analyze complex team performance patterns</li>
+                                        <li>• Generate predictive insights and forecasts</li>
+                                        <li>• Optimize resource allocation automatically</li>
+                                        <li>• Create detailed reports and visualizations</li>
+                                    </ul>
+                                    <p class="mt-2 text-cyan-400">What would you like me to analyze for you?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Model Selector -->
+                <div class="mb-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-gray-400 font-medium">AI Model:</span>
+                        <select id="aiModelSelect" class="bg-black/30 border border-white/20 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <option value="gpt-4-turbo-preview">GPT-4 Turbo (Recommended)</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-4-vision-preview">GPT-4 Vision</option>
+                            <option value="claude-3-opus">Claude 3 Opus</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quick Action Buttons -->
+                <div class="mb-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="quickPrompt('Analyze team performance trends and predict next sprint outcomes')" class="text-xs bg-gradient-to-r from-blue-600/20 to-cyan-600/20 text-blue-400 px-3 py-2 rounded-lg hover:from-blue-600/30 hover:to-cyan-600/30 transition-colors border border-blue-500/30">
+                            <i class="fas fa-chart-line mr-1"></i>Performance Analysis
+                        </button>
+                        <button onclick="quickPrompt('Generate comprehensive productivity report with AI insights')" class="text-xs bg-gradient-to-r from-green-600/20 to-emerald-600/20 text-green-400 px-3 py-2 rounded-lg hover:from-green-600/30 hover:to-emerald-600/30 transition-colors border border-green-500/30">
+                            <i class="fas fa-file-alt mr-1"></i>Smart Report
+                        </button>
+                        <button onclick="quickPrompt('Optimize resource allocation and suggest workload rebalancing')" class="text-xs bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-400 px-3 py-2 rounded-lg hover:from-purple-600/30 hover:to-pink-600/30 transition-colors border border-purple-500/30">
+                            <i class="fas fa-cogs mr-1"></i>Optimize Resources
+                        </button>
+                        <button onclick="quickPrompt('Predict project risks and suggest mitigation strategies')" class="text-xs bg-gradient-to-r from-red-600/20 to-orange-600/20 text-red-400 px-3 py-2 rounded-lg hover:from-red-600/30 hover:to-orange-600/30 transition-colors border border-red-500/30">
+                            <i class="fas fa-shield-alt mr-1"></i>Risk Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Input -->
+                <div class="space-y-3">
+                    <div class="flex space-x-2">
+                        <div class="flex-1 relative">
+                            <input type="text" id="chatInput" placeholder="Ask me anything about your team, projects, or performance..." 
+                                   class="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-colors"
+                                   onkeypress="handleChatKeyPress(event)">
+                            <button onclick="toggleVoiceInput()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                        <button onclick="sendMessage()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-lg text-sm font-medium transition-colors glow-effect" id="sendButton">
+                            <i class="fas fa-paper-plane mr-1"></i>Send
+                        </button>
+                    </div>
+                    
+                    <!-- Advanced Options -->
+                    <div class="flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center space-x-2 text-gray-400">
+                                <input type="checkbox" id="streamResponse" checked class="rounded">
+                                <span>Stream response</span>
+                            </label>
+                            <label class="flex items-center space-x-2 text-gray-400">
+                                <input type="checkbox" id="useFunction" checked class="rounded">
+                                <span>Function calling</span>
+                            </label>
+                        </div>
+                        <div class="text-gray-500">
+                            <span id="tokenCount">0</span> / 4000 tokens
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-xs text-gray-400 bg-black/20 rounded-lg p-2">
+                    <i class="fas fa-lightbulb text-yellow-400 mr-1"></i>
+                    <strong>Pro Tips:</strong> Try "Show me team burnout risks" or "Create a sprint retrospective analysis" or "What's our velocity trend?"
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Management -->
+        <div class="mt-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Task Management</h2>
+                <button onclick="addNewTask()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    + New Task
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="taskColumns">
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-3 text-yellow-400">📋 To Do</h3>
+                    <div id="todoTasks" class="space-y-2"></div>
+                </div>
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-3 text-blue-400">⚡ In Progress</h3>
+                    <div id="inProgressTasks" class="space-y-2"></div>
+                </div>
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-3 text-green-400">✅ Completed</h3>
+                    <div id="completedTasks" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OpenAI Configuration Panel -->
+        <div class="mt-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold">OpenAI Configuration</h2>
+                <button onclick="toggleApiConfig()" class="text-blue-400 hover:text-blue-300 text-sm">
+                    ⚙️ Settings
+                </button>
+            </div>
+            
+            <div id="apiConfigPanel" class="hidden space-y-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API Key</label>
+                        <input type="password" id="apiKeyInput" placeholder="sk-..." 
+                               class="w-full bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Model</label>
+                        <select id="modelSelect" class="w-full bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="saveApiConfig()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm transition-colors">
+                        Save Configuration
+                    </button>
+                    <button onclick="testApiConnection()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm transition-colors">
+                        Test Connection
+                    </button>
+                </div>
+                <div class="text-xs text-gray-400">
+                    🔒 Your API key is stored locally and never shared. Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" class="text-blue-400 hover:underline">OpenAI Platform</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-2 text-blue-400">🧠 AI Capabilities</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>• Data analysis & insights</li>
+                        <li>• Productivity reports</li>
+                        <li>• Workflow optimization</li>
+                        <li>• Team performance metrics</li>
+                    </ul>
+                </div>
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-2 text-green-400">📊 Smart Analytics</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>• Real-time data processing</li>
+                        <li>• Predictive insights</li>
+                        <li>• Custom recommendations</li>
+                        <li>• Automated reporting</li>
+                    </ul>
+                </div>
+                <div class="bg-black/20 rounded-lg p-4">
+                    <h3 class="font-semibold mb-2 text-purple-400">⚡ Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="quickPrompt('Generate weekly team report')" class="w-full text-left text-sm bg-white/5 hover:bg-white/10 px-2 py-1 rounded transition-colors">
+                            📈 Weekly Report
+                        </button>
+                        <button onclick="quickPrompt('Identify bottlenecks in current tasks')" class="w-full text-left text-sm bg-white/5 hover:bg-white/10 px-2 py-1 rounded transition-colors">
+                            🔍 Find Bottlenecks
+                        </button>
+                        <button onclick="quickPrompt('Suggest task reassignments')" class="w-full text-left text-sm bg-white/5 hover:bg-white/10 px-2 py-1 rounded transition-colors">
+                            🔄 Reassign Tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Analytics Dashboard -->
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Performance Analytics -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">Performance Analytics</h2>
+                    <button onclick="refreshAnalytics()" class="text-blue-400 hover:text-blue-300 text-sm">🔄 Refresh</button>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-green-400">Team Velocity</h3>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-400">Sprint Progress</span>
+                            <span class="text-sm font-semibold" id="sprintProgress">73%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
+                            <div class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 73%"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-center text-sm">
+                            <div>
+                                <div class="text-lg font-bold text-blue-400" id="velocityPoints">32</div>
+                                <div class="text-gray-400">Story Points</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-yellow-400" id="burndownRate">-8%</div>
+                                <div class="text-gray-400">Behind Target</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-purple-400" id="cycleTime">4.7d</div>
+                                <div class="text-gray-400">Avg Cycle Time</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-blue-400">Quality Metrics</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Code Quality</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 bg-gray-700 rounded-full h-1.5">
+                                        <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 78%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold text-yellow-400">78%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Test Coverage</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 bg-gray-700 rounded-full h-1.5">
+                                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 64%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold text-red-400">64%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Open Bugs</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 bg-gray-700 rounded-full h-1.5">
+                                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold text-red-400">12 bugs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Management -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">Resource Management</h2>
+                    <button onclick="optimizeResources()" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm transition-colors">⚡ Optimize</button>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-yellow-400">Capacity Planning</h3>
+                        <div id="capacityChart" class="space-y-2">
+                            <!-- Capacity bars will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-red-400">Workload Distribution</h3>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-red-400" id="overloadedCount">1</div>
+                                <div class="text-gray-400">Overloaded</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-400" id="availableCount">2</div>
+                                <div class="text-gray-400">Available</div>
+                            </div>
+                        </div>
+                        <button onclick="showWorkloadBalancer()" class="w-full mt-3 bg-blue-600/20 text-blue-400 py-2 rounded hover:bg-blue-600/30 transition-colors text-sm">
+                            🔄 Balance Workload
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Features Panel -->
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Time Tracking & Reports -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <h2 class="text-xl font-bold mb-4">⏱️ Time Tracking</h2>
+                <div class="space-y-4">
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">Active Timer</span>
+                            <span class="text-green-400 text-sm" id="activeTimer">--:--:--</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mb-3" id="activeTask">No active task</div>
+                        <div class="flex space-x-2">
+                            <button onclick="startTimer()" class="flex-1 bg-green-600 hover:bg-green-700 py-2 rounded text-xs transition-colors" id="startBtn">▶️ Start</button>
+                            <button onclick="pauseTimer()" class="flex-1 bg-yellow-600 hover:bg-yellow-700 py-2 rounded text-xs transition-colors" id="pauseBtn" disabled>⏸️ Pause</button>
+                            <button onclick="stopTimer()" class="flex-1 bg-red-600 hover:bg-red-700 py-2 rounded text-xs transition-colors" id="stopBtn" disabled>⏹️ Stop</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2 text-blue-400">Today's Summary</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Total Time:</span>
+                                <span id="todayTotal">3h 47m</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Billable:</span>
+                                <span class="text-green-400" id="billableTime">3h 20m</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Tasks:</span>
+                                <span id="tasksToday">2 completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="generateTimeReport()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm transition-colors">
+                        📊 Generate Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notifications & Alerts -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">🔔 Smart Alerts</h2>
+                    <button onclick="toggleNotifications()" class="text-blue-400 hover:text-blue-300 text-sm" id="notifToggle">🔕 Enable</button>
+                </div>
+                <div class="space-y-3" id="alertsList">
+                    <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="text-red-400 text-sm">🚨 Critical</span>
+                            <span class="text-xs text-gray-400">8 min ago</span>
+                        </div>
+                        <p class="text-sm">Payment timeout issues affecting 3% of transactions</p>
+                        <button onclick="resolveAlert(1)" class="text-xs text-blue-400 hover:underline mt-1">Investigate →</button>
+                    </div>
+                    
+                    <div class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="text-yellow-400 text-sm">⚠️ Warning</span>
+                            <span class="text-xs text-gray-400">23 min ago</span>
+                        </div>
+                        <p class="text-sm">Marcus Williams working 52h/week - burnout risk</p>
+                        <button onclick="resolveAlert(2)" class="text-xs text-blue-400 hover:underline mt-1">Rebalance →</button>
+                    </div>
+                    
+                    <div class="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span class="text-blue-400 text-sm">ℹ️ Info</span>
+                            <span class="text-xs text-gray-400">1 hour ago</span>
+                        </div>
+                        <p class="text-sm">Database migration scheduled for tonight 11 PM</p>
+                        <button onclick="resolveAlert(3)" class="text-xs text-blue-400 hover:underline mt-1">Acknowledge →</button>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <button onclick="createCustomAlert()" class="w-full bg-purple-600/20 text-purple-400 py-2 rounded hover:bg-purple-600/30 transition-colors text-sm">
+                        ➕ Create Alert Rule
+                    </button>
+                </div>
+            </div>
+
+            <!-- Automation & Workflows -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+                <h2 class="text-xl font-bold mb-4">🤖 Automation</h2>
+                <div class="space-y-4">
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-green-400">Active Workflows</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm">Auto-assign tasks</span>
+                                </div>
+                                <button onclick="toggleWorkflow(1)" class="text-xs text-blue-400">Edit</button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm">Daily standup reminders</span>
+                                </div>
+                                <button onclick="toggleWorkflow(2)" class="text-xs text-blue-400">Edit</button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                    <span class="text-sm">Overdue task escalation</span>
+                                </div>
+                                <button onclick="toggleWorkflow(3)" class="text-xs text-blue-400">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/20 rounded-lg p-4">
+                        <h3 class="font-semibold mb-3 text-purple-400">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="bulkAssign()" class="bg-blue-600/20 text-blue-400 py-2 rounded text-xs hover:bg-blue-600/30 transition-colors">
+                                📋 Bulk Assign
+                            </button>
+                            <button onclick="generateStandup()" class="bg-green-600/20 text-green-400 py-2 rounded text-xs hover:bg-green-600/30 transition-colors">
+                                📝 Standup Notes
+                            </button>
+                            <button onclick="scheduleReview()" class="bg-yellow-600/20 text-yellow-400 py-2 rounded text-xs hover:bg-yellow-600/30 transition-colors">
+                                📅 Schedule Review
+                            </button>
+                            <button onclick="exportData()" class="bg-purple-600/20 text-purple-400 py-2 rounded text-xs hover:bg-purple-600/30 transition-colors">
+                                💾 Export Data
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="createWorkflow()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-2 rounded text-sm transition-colors">
+                        ✨ Create Workflow
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Activity Feed -->
+        <div class="mt-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold">Real-time Activity Feed</h2>
+                <div class="flex items-center space-x-2">
+                    <button onclick="filterActivities('all')" class="text-xs px-2 py-1 rounded bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition-colors" id="filterAll">All</button>
+                    <button onclick="filterActivities('tasks')" class="text-xs px-2 py-1 rounded bg-gray-600/20 text-gray-400 hover:bg-gray-600/30 transition-colors" id="filterTasks">Tasks</button>
+                    <button onclick="filterActivities('users')" class="text-xs px-2 py-1 rounded bg-gray-600/20 text-gray-400 hover:bg-gray-600/30 transition-colors" id="filterUsers">Users</button>
+                    <button onclick="clearActivities()" class="text-xs text-red-400 hover:text-red-300">Clear</button>
+                </div>
+            </div>
+            <div class="space-y-3" id="activityFeed">
+                <!-- Activity items will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Advanced OpenAI Configuration with GPT-4 Turbo
+        const OPENAI_CONFIG = {
+            apiKey: 'your-openai-api-key-here', // Replace with your actual API key
+            model: 'gpt-4-turbo-preview',
+            maxTokens: 4000,
+            temperature: 0.7,
+            stream: true,
+            functions: [
+                {
+                    name: "analyze_team_performance",
+                    description: "Analyze team performance metrics and provide insights",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            users: { type: "array", description: "Array of user objects" },
+                            tasks: { type: "array", description: "Array of task objects" },
+                            timeframe: { type: "string", description: "Analysis timeframe" }
+                        }
+                    }
+                },
+                {
+                    name: "generate_predictive_insights",
+                    description: "Generate predictive insights for project outcomes",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            historical_data: { type: "array", description: "Historical performance data" },
+                            current_metrics: { type: "object", description: "Current team metrics" }
+                        }
+                    }
+                },
+                {
+                    name: "optimize_resource_allocation",
+                    description: "Optimize resource allocation based on current workload",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            team_capacity: { type: "object", description: "Team capacity data" },
+                            project_requirements: { type: "array", description: "Project requirements" }
+                        }
+                    }
+                }
+            ]
+        };
+
+        // Advanced AI Models Configuration
+        const AI_MODELS = {
+            'gpt-4-turbo-preview': { name: 'GPT-4 Turbo', maxTokens: 4000, cost: 0.01 },
+            'gpt-4': { name: 'GPT-4', maxTokens: 8000, cost: 0.03 },
+            'gpt-4-vision-preview': { name: 'GPT-4 Vision', maxTokens: 4000, cost: 0.01 },
+            'gpt-3.5-turbo': { name: 'GPT-3.5 Turbo', maxTokens: 4000, cost: 0.001 },
+            'claude-3-opus': { name: 'Claude 3 Opus', maxTokens: 4000, cost: 0.015 },
+            'claude-3-sonnet': { name: 'Claude 3 Sonnet', maxTokens: 4000, cost: 0.003 }
+        };
+
+        // Realistic Enterprise Data - TechFlow Solutions Inc.
+        let users = [
+            { 
+                id: 1, name: "Sarah Chen", email: "s.chen@techflow.com", 
+                status: "online", role: "Senior Engineering Manager", department: "Platform Engineering",
+                lastActive: new Date(Date.now() - 4 * 60 * 1000), // 4 minutes ago
+                productivity: 78.4, tasksCompleted: 23, avgResponseTime: 2.3,
+                skills: ["Team Leadership", "System Design", "Kubernetes", "Go", "Incident Management"],
+                location: "Austin, TX", timezone: "CST",
+                workingHours: { start: "08:00", end: "17:00" },
+                performance: { efficiency: 82, quality: 89, collaboration: 94 },
+                currentProjects: ["Q1 Platform Stability", "Engineering Hiring"],
+                certifications: ["AWS Solutions Architect", "Certified Kubernetes Administrator"],
+                joinDate: "2021-03-15", salary: 165000, level: "Senior Manager",
+                currentLoad: "High", weeklyHours: 47, lastVacation: "2023-12-18"
+            },
+            { 
+                id: 2, name: "Marcus Williams", email: "m.williams@techflow.com", 
+                status: "busy", role: "Staff Software Engineer", department: "Platform Engineering",
+                lastActive: new Date(Date.now() - 12 * 60 * 1000), // 12 minutes ago
+                productivity: 71.2, tasksCompleted: 18, avgResponseTime: 1.4,
+                skills: ["Python", "PostgreSQL", "Redis", "Microservices", "API Design"],
+                location: "Remote - Denver, CO", timezone: "MST",
+                workingHours: { start: "09:00", end: "17:30" },
+                performance: { efficiency: 75, quality: 91, collaboration: 68 },
+                currentProjects: ["Payment Service Refactor", "Database Migration"],
+                certifications: ["AWS Developer Associate"],
+                joinDate: "2020-08-10", salary: 155000, level: "Staff",
+                currentLoad: "Very High", weeklyHours: 52, lastVacation: "2023-07-04"
+            },
+            { 
+                id: 3, name: "Priya Patel", email: "p.patel@techflow.com", 
+                status: "offline", role: "Senior Product Designer", department: "Product Design",
+                lastActive: new Date(Date.now() - 45 * 60 * 1000), // 45 minutes ago
+                productivity: 83.7, tasksCompleted: 15, avgResponseTime: 3.2,
+                skills: ["Figma", "User Research", "Prototyping", "Design Systems", "A/B Testing"],
+                location: "San Francisco, CA", timezone: "PST",
+                workingHours: { start: "10:00", end: "18:30" },
+                performance: { efficiency: 88, quality: 95, collaboration: 87 },
+                currentProjects: ["Checkout Flow Redesign", "Mobile Design System"],
+                certifications: ["Google UX Certificate", "Nielsen Norman UX"],
+                joinDate: "2022-01-20", salary: 135000, level: "Senior",
+                currentLoad: "Medium", weeklyHours: 42, lastVacation: "2024-01-02"
+            },
+            { 
+                id: 4, name: "James Rodriguez", email: "j.rodriguez@techflow.com", 
+                status: "online", role: "Senior Data Engineer", department: "Data Platform",
+                lastActive: new Date(Date.now() - 7 * 60 * 1000), // 7 minutes ago
+                productivity: 69.8, tasksCompleted: 12, avgResponseTime: 4.1,
+                skills: ["Apache Spark", "Airflow", "Snowflake", "dbt", "Python"],
+                location: "Chicago, IL", timezone: "CST",
+                workingHours: { start: "08:30", end: "17:00" },
+                performance: { efficiency: 72, quality: 88, collaboration: 79 },
+                currentProjects: ["Data Lake Migration", "Real-time Analytics Pipeline"],
+                certifications: ["Snowflake SnowPro Core", "Databricks Certified"],
+                joinDate: "2021-11-08", salary: 145000, level: "Senior",
+                currentLoad: "High", weeklyHours: 48, lastVacation: "2023-11-23"
+            },
+            { 
+                id: 5, name: "Lisa Zhang", email: "l.zhang@techflow.com", 
+                status: "busy", role: "DevOps Engineer", department: "Platform Engineering",
+                lastActive: new Date(Date.now() - 18 * 60 * 1000), // 18 minutes ago
+                productivity: 85.1, tasksCompleted: 21, avgResponseTime: 1.8,
+                skills: ["Terraform", "Jenkins", "Docker", "Monitoring", "AWS"],
+                location: "Seattle, WA", timezone: "PST",
+                workingHours: { start: "07:30", end: "16:00" },
+                performance: { efficiency: 89, quality: 92, collaboration: 84 },
+                currentProjects: ["CI/CD Pipeline Upgrade", "Infrastructure Cost Optimization"],
+                certifications: ["AWS DevOps Professional", "HashiCorp Terraform Associate"],
+                joinDate: "2020-05-14", salary: 140000, level: "Senior",
+                currentLoad: "Medium", weeklyHours: 44, lastVacation: "2023-12-25"
+            },
+            { 
+                id: 6, name: "Robert Kim", email: "r.kim@techflow.com", 
+                status: "online", role: "Product Manager", department: "Growth Product",
+                lastActive: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
+                productivity: 76.3, tasksCompleted: 19, avgResponseTime: 2.7,
+                skills: ["Product Strategy", "SQL", "Mixpanel", "A/B Testing", "User Research"],
+                location: "New York, NY", timezone: "EST",
+                workingHours: { start: "09:00", end: "18:00" },
+                performance: { efficiency: 79, quality: 86, collaboration: 91 },
+                currentProjects: ["User Onboarding Optimization", "Pricing Strategy Review"],
+                certifications: ["Certified Scrum Product Owner", "Google Analytics"],
+                joinDate: "2022-06-01", salary: 150000, level: "Senior",
+                currentLoad: "Medium", weeklyHours: 45, lastVacation: "2023-10-15"
+            },
+            { 
+                id: 7, name: "Amanda Foster", email: "a.foster@techflow.com", 
+                status: "offline", role: "QA Engineer", department: "Quality Engineering",
+                lastActive: new Date(Date.now() - 125 * 60 * 1000), // 2+ hours ago
+                productivity: 74.6, tasksCompleted: 16, avgResponseTime: 3.5,
+                skills: ["Selenium", "Jest", "API Testing", "Performance Testing", "Bug Tracking"],
+                location: "Remote - Portland, OR", timezone: "PST",
+                workingHours: { start: "08:00", end: "16:30" },
+                performance: { efficiency: 77, quality: 93, collaboration: 82 },
+                currentProjects: ["Automated Test Suite", "Performance Testing Framework"],
+                certifications: ["ISTQB Foundation Level"],
+                joinDate: "2021-09-20", salary: 95000, level: "Mid-Level",
+                currentLoad: "Low", weeklyHours: 38, lastVacation: "2023-08-14"
+            },
+            { 
+                id: 8, name: "Kevin Park", email: "k.park@techflow.com", 
+                status: "busy", role: "Frontend Engineer", department: "Product Engineering",
+                lastActive: new Date(Date.now() - 25 * 60 * 1000), // 25 minutes ago
+                productivity: 67.9, tasksCompleted: 14, avgResponseTime: 2.1,
+                skills: ["React", "TypeScript", "CSS", "Next.js", "Testing Library"],
+                location: "Los Angeles, CA", timezone: "PST",
+                workingHours: { start: "10:00", end: "18:30" },
+                performance: { efficiency: 71, quality: 84, collaboration: 76 },
+                currentProjects: ["Dashboard Redesign", "Component Library"],
+                certifications: ["React Developer Certification"],
+                joinDate: "2023-02-15", salary: 125000, level: "Mid-Level",
+                currentLoad: "High", weeklyHours: 46, lastVacation: "2023-12-20"
+            }
+        ];
+
+        let tasks = [
+            {
+                id: 1, title: "Fix payment processing timeout issues", 
+                assignee: "Marcus Williams", priority: "critical", status: "inprogress",
+                description: "Investigate and resolve intermittent timeout errors in payment service affecting 3% of transactions",
+                estimatedHours: 16, actualHours: 12, progress: 45,
+                startDate: "2024-01-22", dueDate: "2024-01-26",
+                tags: ["Bug Fix", "Payment", "Backend"],
+                dependencies: ["Database performance analysis"],
+                blockers: ["Waiting for production logs access"], comments: 8, attachments: 2,
+                subtasks: [
+                    { id: "1a", title: "Analyze error logs", completed: true },
+                    { id: "1b", title: "Identify root cause", completed: false },
+                    { id: "1c", title: "Implement fix", completed: false },
+                    { id: "1d", title: "Deploy and monitor", completed: false }
+                ]
+            },
+            {
+                id: 2, title: "Checkout flow A/B test implementation", 
+                assignee: "Priya Patel", priority: "high", status: "inprogress",
+                description: "Design and implement A/B test for new checkout flow to improve conversion rate",
+                estimatedHours: 24, actualHours: 18, progress: 70,
+                startDate: "2024-01-15", dueDate: "2024-01-30",
+                tags: ["Design", "A/B Testing", "Conversion"],
+                dependencies: ["Analytics tracking setup"],
+                blockers: [], comments: 12, attachments: 5,
+                subtasks: [
+                    { id: "2a", title: "Design variant mockups", completed: true },
+                    { id: "2b", title: "Create prototype", completed: true },
+                    { id: "2c", title: "Set up tracking events", completed: false },
+                    { id: "2d", title: "Launch test", completed: false }
+                ]
+            },
+            {
+                id: 3, title: "Migrate user data to new schema", 
+                assignee: "James Rodriguez", priority: "high", status: "todo",
+                description: "Migrate 2.3M user records to new database schema with zero downtime",
+                estimatedHours: 32, actualHours: 0, progress: 0,
+                startDate: "2024-01-29", dueDate: "2024-02-15",
+                tags: ["Database", "Migration", "Data"],
+                dependencies: ["Schema validation", "Backup procedures"],
+                blockers: ["Pending DBA approval"], comments: 4, attachments: 3,
+                subtasks: [
+                    { id: "3a", title: "Create migration scripts", completed: false },
+                    { id: "3b", title: "Test on staging", completed: false },
+                    { id: "3c", title: "Execute migration", completed: false },
+                    { id: "3d", title: "Validate data integrity", completed: false }
+                ]
+            },
+            {
+                id: 4, title: "Implement automated testing for API endpoints", 
+                assignee: "Amanda Foster", priority: "medium", status: "inprogress",
+                description: "Add comprehensive test coverage for all REST API endpoints",
+                estimatedHours: 20, actualHours: 14, progress: 60,
+                startDate: "2024-01-18", dueDate: "2024-02-02",
+                tags: ["Testing", "API", "Automation"],
+                dependencies: [], blockers: [], comments: 6, attachments: 1,
+                subtasks: [
+                    { id: "4a", title: "Set up test framework", completed: true },
+                    { id: "4b", title: "Write endpoint tests", completed: true },
+                    { id: "4c", title: "Add CI integration", completed: false },
+                    { id: "4d", title: "Document test procedures", completed: false }
+                ]
+            },
+            {
+                id: 5, title: "Upgrade Kubernetes cluster to v1.28", 
+                assignee: "Lisa Zhang", priority: "medium", status: "todo",
+                description: "Plan and execute upgrade of production Kubernetes cluster",
+                estimatedHours: 28, actualHours: 0, progress: 0,
+                startDate: "2024-02-05", dueDate: "2024-02-20",
+                tags: ["Infrastructure", "Kubernetes", "Upgrade"],
+                dependencies: ["Compatibility testing"],
+                blockers: [], comments: 2, attachments: 1,
+                subtasks: [
+                    { id: "5a", title: "Review upgrade path", completed: false },
+                    { id: "5b", title: "Test on staging", completed: false },
+                    { id: "5c", title: "Schedule maintenance window", completed: false },
+                    { id: "5d", title: "Execute upgrade", completed: false }
+                ]
+            },
+            {
+                id: 6, title: "Analyze user onboarding funnel metrics", 
+                assignee: "Robert Kim", priority: "medium", status: "inprogress",
+                description: "Deep dive analysis of user onboarding drop-off points and recommendations",
+                estimatedHours: 12, actualHours: 8, progress: 55,
+                startDate: "2024-01-20", dueDate: "2024-01-31",
+                tags: ["Analytics", "Product", "Onboarding"],
+                dependencies: ["Data export from Mixpanel"],
+                blockers: [], comments: 9, attachments: 4,
+                subtasks: [
+                    { id: "6a", title: "Extract funnel data", completed: true },
+                    { id: "6b", title: "Identify drop-off points", completed: true },
+                    { id: "6c", title: "Create recommendations", completed: false },
+                    { id: "6d", title: "Present findings", completed: false }
+                ]
+            },
+            {
+                id: 7, title: "Refactor React component library", 
+                assignee: "Kevin Park", priority: "low", status: "todo",
+                description: "Modernize component library with TypeScript and improved accessibility",
+                estimatedHours: 40, actualHours: 0, progress: 0,
+                startDate: "2024-02-12", dueDate: "2024-03-15",
+                tags: ["Frontend", "React", "TypeScript"],
+                dependencies: ["Design system updates"],
+                blockers: [], comments: 1, attachments: 0,
+                subtasks: [
+                    { id: "7a", title: "Audit existing components", completed: false },
+                    { id: "7b", title: "Add TypeScript types", completed: false },
+                    { id: "7c", title: "Improve accessibility", completed: false },
+                    { id: "7d", title: "Update documentation", completed: false }
+                ]
+            },
+            {
+                id: 8, title: "Set up monitoring for new microservice", 
+                assignee: "Sarah Chen", priority: "high", status: "todo",
+                description: "Configure comprehensive monitoring and alerting for payment service",
+                estimatedHours: 8, actualHours: 0, progress: 0,
+                startDate: "2024-01-26", dueDate: "2024-02-01",
+                tags: ["Monitoring", "DevOps", "Microservices"],
+                dependencies: ["Service deployment"],
+                blockers: [], comments: 3, attachments: 1,
+                subtasks: [
+                    { id: "8a", title: "Set up Prometheus metrics", completed: false },
+                    { id: "8b", title: "Configure Grafana dashboards", completed: false },
+                    { id: "8c", title: "Create alert rules", completed: false }
+                ]
+            },
+            {
+                id: 9, title: "Security audit of authentication system", 
+                assignee: "Marcus Williams", priority: "high", status: "todo",
+                description: "Conduct thorough security review of OAuth implementation",
+                estimatedHours: 16, actualHours: 0, progress: 0,
+                startDate: "2024-02-01", dueDate: "2024-02-10",
+                tags: ["Security", "Audit", "Authentication"],
+                dependencies: ["OAuth implementation completion"],
+                blockers: [], comments: 0, attachments: 0,
+                subtasks: [
+                    { id: "9a", title: "Code review", completed: false },
+                    { id: "9b", title: "Penetration testing", completed: false },
+                    { id: "9c", title: "Document findings", completed: false }
+                ]
+            },
+            {
+                id: 10, title: "Optimize database query performance", 
+                assignee: "James Rodriguez", priority: "medium", status: "completed",
+                description: "Improve slow-running queries identified in performance monitoring",
+                estimatedHours: 12, actualHours: 14, progress: 100,
+                startDate: "2024-01-08", dueDate: "2024-01-19",
+                tags: ["Database", "Performance", "Optimization"],
+                dependencies: [], blockers: [], comments: 7, attachments: 2,
+                subtasks: [
+                    { id: "10a", title: "Identify slow queries", completed: true },
+                    { id: "10b", title: "Add database indexes", completed: true },
+                    { id: "10c", title: "Optimize query logic", completed: true },
+                    { id: "10d", title: "Validate improvements", completed: true }
+                ]
+            }
+        ];
+
+        let activities = [];
+
+        // Advanced Slideshow Management
+        let currentSlideIndex = 0;
+        let autoplayInterval = null;
+        let isAutoplayActive = false;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            const indicators = document.querySelectorAll('.slide-indicator');
+            
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            indicators.forEach((indicator, i) => {
+                indicator.classList.remove('active', 'bg-blue-500');
+                indicator.classList.add('bg-gray-500');
+                if (i === index) {
+                    indicator.classList.add('active', 'bg-blue-500');
+                    indicator.classList.remove('bg-gray-500');
+                }
+            });
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        function previousSlide() {
+            const slides = document.querySelectorAll('.slide');
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        function currentSlide(index) {
+            currentSlideIndex = index - 1;
+            showSlide(currentSlideIndex);
+        }
+
+        function toggleAutoplay() {
+            const btn = document.getElementById('autoplayBtn');
+            if (isAutoplayActive) {
+                clearInterval(autoplayInterval);
+                btn.innerHTML = '<i class="fas fa-play"></i>';
+                isAutoplayActive = false;
+            } else {
+                autoplayInterval = setInterval(nextSlide, 5000);
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+                isAutoplayActive = true;
+            }
+        }
+
+        // Advanced Demo Functions
+        function demoAnalytics() {
+            addChatMessage('Demo', '🧠 Launching Advanced Analytics Demo...');
+            
+            // Create animated chart
+            setTimeout(() => {
+                createAnalyticsChart();
+                addChatMessage('AI Analytics', `📊 **Real-time Performance Analysis Complete**
+
+**Key Insights Discovered:**
+• Team velocity increased 23% over last sprint
+• Sarah Chen showing exceptional leadership metrics (94% collaboration score)
+• Marcus Williams at risk of burnout (52h/week) - recommend workload reduction
+• Payment service issues correlate with 15% productivity drop in backend team
+
+**Predictive Forecasts:**
+• 87% probability of meeting sprint goals with current trajectory
+• Recommended: Redistribute 2 tasks from Marcus to Amanda Foster
+• Optimal team size for Q2: 10-12 members (currently 8)
+
+**AI Recommendations:**
+1. Implement daily check-ins for overloaded team members
+2. Cross-train QA team on backend technologies
+3. Schedule technical debt sprint in next iteration`);
+            }, 1500);
+        }
+
+        function demoAIChat() {
+            addChatMessage('You', 'Show me team burnout risks and suggest solutions');
+            
+            setTimeout(() => {
+                addChatMessage('GPT-4 Turbo', `🔍 **Advanced Burnout Risk Analysis**
+
+**High Risk Individuals:**
+• **Marcus Williams** - 52h/week, productivity declining (-8% this week)
+  - Stress indicators: Late responses, missed meetings
+  - Recommendation: Immediate workload reduction, 1:1 with manager
+
+**Medium Risk:**
+• **Kevin Park** - 46h/week, new team member showing signs of overwhelm
+  - Recommendation: Pair programming sessions, mentorship program
+
+**Protective Factors Identified:**
+• Lisa Zhang: Excellent work-life balance (44h/week, high productivity)
+• Amanda Foster: Underutilized capacity, could take on additional tasks
+
+**AI-Generated Action Plan:**
+1. **Immediate (24h):** Reassign 2 critical tasks from Marcus to Amanda
+2. **This Week:** Schedule wellness check-ins for high-risk individuals  
+3. **Next Sprint:** Implement workload monitoring alerts
+4. **Long-term:** Hire additional backend developer to reduce team pressure
+
+**Predicted Impact:** 34% reduction in burnout risk, 12% productivity increase`);
+            }, 2000);
+        }
+
+        function demoCollaboration() {
+            addChatMessage('Demo', '⚡ Initializing Real-time Collaboration Demo...');
+            
+            // Simulate real-time updates
+            setTimeout(() => {
+                addActivity('🔄 Sarah Chen updated task: Payment timeout fixes');
+                addActivity('💬 Marcus Williams commented on: Database migration');
+                addActivity('✅ Lisa Zhang completed: CI/CD pipeline upgrade');
+            }, 1000);
+            
+            setTimeout(() => {
+                addChatMessage('Collaboration Engine', `🤝 **Real-time Collaboration Analysis**
+
+**Active Collaboration Sessions:**
+• 3 team members working on payment service fixes
+• Live code review in progress (React component library)
+• Async discussion: Database migration strategy
+
+**AI-Powered Insights:**
+• Detected potential merge conflict in payment service
+• Suggested reviewer: Sarah Chen (domain expertise match: 94%)
+• Optimal pairing: Kevin Park + Lisa Zhang (skill complementarity)
+
+**Smart Notifications Sent:**
+• Marcus: "Take a break - you've been coding for 3.5 hours"
+• Team: "Daily standup in 15 minutes"
+• Sarah: "Code review requested - high priority"
+
+**Collaboration Score:** 87% (Above team average)
+**Response Time:** 1.2 hours (Excellent)
+**Knowledge Sharing:** 23 interactions this week`);
+            }, 3000);
+        }
+
+        function playDemo() {
+            const videoContainer = document.querySelector('.video-container');
+            videoContainer.innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-purple-900 rounded-xl flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="w-20 h-20 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <p class="text-xl font-medium">Loading Interactive Demo...</p>
+                        <p class="text-gray-400 mt-2">Preparing AI-powered workspace simulation</p>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                videoContainer.innerHTML = `
+                    <div class="absolute inset-0 bg-black rounded-xl overflow-hidden">
+                        <div class="h-full flex flex-col">
+                            <div class="bg-gray-800 p-2 flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span class="text-xs text-gray-400 ml-2">TechFlow AI Demo</span>
+                            </div>
+                            <div class="flex-1 p-4 space-y-3">
+                                <div class="bg-blue-500/20 p-3 rounded animate-pulse">
+                                    <div class="h-4 bg-blue-400 rounded w-3/4 mb-2"></div>
+                                    <div class="h-3 bg-blue-300 rounded w-1/2"></div>
+                                </div>
+                                <div class="bg-green-500/20 p-3 rounded animate-pulse" style="animation-delay: 0.5s">
+                                    <div class="h-4 bg-green-400 rounded w-2/3 mb-2"></div>
+                                    <div class="h-3 bg-green-300 rounded w-3/4"></div>
+                                </div>
+                                <div class="bg-purple-500/20 p-3 rounded animate-pulse" style="animation-delay: 1s">
+                                    <div class="h-4 bg-purple-400 rounded w-1/2 mb-2"></div>
+                                    <div class="h-3 bg-purple-300 rounded w-2/3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Advanced Chart Creation
+        function createAnalyticsChart() {
+            const ctx = document.getElementById('analyticsChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Current'],
+                    datasets: [{
+                        label: 'Team Velocity',
+                        data: [28, 32, 29, 35, 38],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Productivity Score',
+                        data: [72, 78, 75, 82, 85],
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Advanced Background Effects
+        function createMatrixRain() {
+            const matrixContainer = document.getElementById('matrixRain');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 50; i++) {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.left = Math.random() * 100 + '%';
+                char.style.animationDelay = Math.random() * 10 + 's';
+                char.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                matrixContainer.appendChild(char);
+            }
+        }
+
+        function createFloatingParticles() {
+            const container = document.getElementById('particleContainer');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 8 + 8) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Advanced UI Functions
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            addActivity('🎨 Theme toggled');
+        }
+
+        function showAISettings() {
+            toggleApiConfig();
+        }
+
+        function toggleAIMode() {
+            const currentModel = document.getElementById('aiModelSelect').value;
+            addChatMessage('System', `🔄 Switching to advanced AI mode with ${AI_MODELS[currentModel]?.name || currentModel}`);
+        }
+
+        function toggleVoiceInput() {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+                
+                recognition.onstart = () => {
+                    addChatMessage('System', '🎤 Listening... Speak your question.');
+                };
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('chatInput').value = transcript;
+                    addChatMessage('System', `🎤 Voice input: "${transcript}"`);
+                };
+                
+                recognition.onerror = () => {
+                    addChatMessage('System', '❌ Voice recognition error. Please try again.');
+                };
+                
+                recognition.start();
+            } else {
+                addChatMessage('System', '❌ Voice recognition not supported in this browser.');
+            }
+        }
+
+        // Initialize the dashboard
+        function init() {
+            loadSavedConfig();
+            updateTime();
+            renderUsers();
+            renderTasks();
+            startRealTimeUpdates();
+            setInterval(updateTime, 1000);
+            
+            // Initialize advanced features
+            createMatrixRain();
+            createFloatingParticles();
+            
+            // Initialize AOS animations
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 1000,
+                    once: true
+                });
+            }
+            
+            // Auto-start slideshow
+            setTimeout(() => {
+                toggleAutoplay();
+            }, 3000);
+            
+            // Show welcome message with OpenAI status
+            setTimeout(() => {
+                const hasApiKey = OPENAI_CONFIG.apiKey && OPENAI_CONFIG.apiKey !== 'your-openai-api-key-here';
+                if (!hasApiKey) {
+                    addChatMessage('System', '💡 Configure your OpenAI API key to unlock the full power of GPT-4 Turbo with function calling, advanced analytics, and predictive insights.');
+                }
+            }, 2000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+
+        function renderUsers() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = users.map(user => {
+                const lastActiveText = formatLastActive(user.lastActive);
+                const performanceAvg = Math.round((user.performance.efficiency + user.performance.quality + user.performance.collaboration) / 3);
+                
+                return `
+                <div class="flex items-center justify-between p-4 bg-black/20 rounded-lg border border-white/10 hover:bg-black/30 transition-colors cursor-pointer" onclick="showUserDetails(${user.id})">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <div class="w-12 h-12 status-${user.status} rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                ${user.name.split(' ').map(n => n.charAt(0)).join('')}
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 ${user.status === 'online' ? 'bg-green-500' : user.status === 'busy' ? 'bg-yellow-500' : 'bg-gray-500'} rounded-full border-2 border-gray-900"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2">
+                                <h3 class="font-semibold text-lg">${user.name}</h3>
+                                <span class="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">${user.level}</span>
+                            </div>
+                            <p class="text-sm text-gray-300">${user.role} • ${user.department}</p>
+                            <p class="text-xs text-gray-400">${user.location} • ${lastActiveText}</p>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-xs text-gray-400">Productivity:</span>
+                                    <span class="text-xs font-semibold text-green-400">${user.productivity}%</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-xs text-gray-400">Tasks:</span>
+                                    <span class="text-xs font-semibold text-blue-400">${user.tasksCompleted}</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-xs text-gray-400">Performance:</span>
+                                    <span class="text-xs font-semibold ${performanceAvg >= 90 ? 'text-green-400' : performanceAvg >= 80 ? 'text-yellow-400' : 'text-red-400'}">${performanceAvg}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end space-y-2">
+                        <span class="px-3 py-1 text-xs rounded-full ${user.status === 'online' ? 'bg-green-500/20 text-green-400' : user.status === 'busy' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-500/20 text-gray-400'}">
+                            ${user.status.toUpperCase()}
+                        </span>
+                        <div class="flex space-x-1">
+                            <button onclick="event.stopPropagation(); editUser(${user.id})" class="text-blue-400 hover:text-blue-300 text-xs px-2 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 transition-colors">Edit</button>
+                            <button onclick="event.stopPropagation(); showUserAnalytics(${user.id})" class="text-purple-400 hover:text-purple-300 text-xs px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 transition-colors">Analytics</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function renderTasks() {
+            const todoTasks = document.getElementById('todoTasks');
+            const inProgressTasks = document.getElementById('inProgressTasks');
+            const completedTasks = document.getElementById('completedTasks');
+
+            todoTasks.innerHTML = tasks.filter(t => t.status === 'todo').map(task => createTaskCard(task)).join('');
+            inProgressTasks.innerHTML = tasks.filter(t => t.status === 'inprogress').map(task => createTaskCard(task)).join('');
+            completedTasks.innerHTML = tasks.filter(t => t.status === 'completed').map(task => createTaskCard(task)).join('');
+        }
+
+        function createTaskCard(task) {
+            const priorityColors = {
+                'critical': 'text-red-500 bg-red-500/20 border-red-500/30',
+                'high': 'text-red-400 bg-red-400/20 border-red-400/30',
+                'medium': 'text-yellow-400 bg-yellow-400/20 border-yellow-400/30',
+                'low': 'text-green-400 bg-green-400/20 border-green-400/30'
+            };
+            
+            const priorityColor = priorityColors[task.priority] || priorityColors['medium'];
+            const daysUntilDue = Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
+            const isOverdue = daysUntilDue < 0;
+            const completedSubtasks = task.subtasks.filter(st => st.completed).length;
+            
+            return `
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10 cursor-pointer hover:bg-white/10 transition-colors group" onclick="showTaskDetails(${task.id})">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm mb-1 group-hover:text-blue-400 transition-colors">${task.title}</h4>
+                            <p class="text-xs text-gray-400 mb-2">${task.description.substring(0, 60)}${task.description.length > 60 ? '...' : ''}</p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded border ${priorityColor} font-medium ml-2">
+                            ${task.priority.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-2 mb-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-400">Assignee:</span>
+                            <span class="text-white font-medium">${task.assignee}</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-400">Progress:</span>
+                            <span class="text-blue-400 font-medium">${task.progress}%</span>
+                        </div>
+                        
+                        <div class="w-full bg-gray-700 rounded-full h-1.5">
+                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-300" style="width: ${task.progress}%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-400">Due:</span>
+                            <span class="${isOverdue ? 'text-red-400' : daysUntilDue <= 3 ? 'text-yellow-400' : 'text-green-400'} font-medium">
+                                ${isOverdue ? `${Math.abs(daysUntilDue)} days overdue` : daysUntilDue === 0 ? 'Due today' : `${daysUntilDue} days left`}
+                            </span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-400">Subtasks:</span>
+                            <span class="text-purple-400 font-medium">${completedSubtasks}/${task.subtasks.length}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3 text-xs text-gray-400">
+                            <span>💬 ${task.comments}</span>
+                            <span>📎 ${task.attachments}</span>
+                            ${task.blockers.length > 0 ? `<span class="text-red-400">🚫 ${task.blockers.length}</span>` : ''}
+                        </div>
+                        
+                        <div class="flex space-x-1">
+                            ${task.tags.slice(0, 2).map(tag => `
+                                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-600/30 text-gray-300">${tag}</span>
+                            `).join('')}
+                            ${task.tags.length > 2 ? `<span class="text-xs text-gray-400">+${task.tags.length - 2}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 pt-2 border-t border-white/10">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-400">Time: ${task.actualHours}h / ${task.estimatedHours}h</span>
+                            <button onclick="event.stopPropagation(); updateTaskStatus(${task.id})" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                Move →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addActivity(message, type = 'info') {
+            const activity = {
+                id: Date.now(),
+                message,
+                type,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            activities.unshift(activity);
+            
+            if (activities.length > 10) activities.pop();
+            
+            renderActivities();
+        }
+
+        function renderActivities() {
+            const feed = document.getElementById('activityFeed');
+            feed.innerHTML = activities.map(activity => `
+                <div class="flex items-center space-x-3 p-3 bg-black/20 rounded-lg slide-in">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div class="flex-1">
+                        <p class="text-sm">${activity.message}</p>
+                        <p class="text-xs text-gray-400">${activity.timestamp}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Advanced Analytics and Helper Functions
+        function formatLastActive(lastActiveDate) {
+            const now = new Date();
+            const diffMs = now - lastActiveDate;
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        }
+
+        function calculateRealTimeStats() {
+            const stats = {
+                totalUsers: users.length,
+                activeUsers: users.filter(u => u.status === 'online').length,
+                activeTasks: tasks.filter(t => t.status === 'inprogress').length,
+                completedTasks: tasks.filter(t => t.status === 'completed').length,
+                overdueTasks: tasks.filter(t => new Date(t.dueDate) < new Date() && t.status !== 'completed').length,
+                avgProductivity: Math.round(users.reduce((sum, u) => sum + u.productivity, 0) / users.length),
+                totalEstimatedHours: tasks.reduce((sum, t) => sum + t.estimatedHours, 0),
+                totalActualHours: tasks.reduce((sum, t) => sum + t.actualHours, 0),
+                dataUpdates: Math.floor(Date.now() / 1000) % 10000 // Simulated counter
+            };
+            
+            return stats;
+        }
+
+        function updateDashboardStats() {
+            const stats = calculateRealTimeStats();
+            
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('activeTasks').textContent = stats.activeTasks;
+            document.getElementById('dataUpdates').textContent = stats.dataUpdates;
+            
+            // Update productivity indicators
+            const productivityElement = document.querySelector('.productivity-indicator');
+            if (productivityElement) {
+                productivityElement.textContent = `${stats.avgProductivity}%`;
+            }
+        }
+
+        function showUserDetails(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">User Profile: ${user.name}</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-blue-400">Basic Information</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div><span class="text-gray-400">Email:</span> ${user.email}</div>
+                                    <div><span class="text-gray-400">Role:</span> ${user.role}</div>
+                                    <div><span class="text-gray-400">Department:</span> ${user.department}</div>
+                                    <div><span class="text-gray-400">Level:</span> ${user.level}</div>
+                                    <div><span class="text-gray-400">Location:</span> ${user.location}</div>
+                                    <div><span class="text-gray-400">Timezone:</span> ${user.timezone}</div>
+                                    <div><span class="text-gray-400">Join Date:</span> ${new Date(user.joinDate).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-green-400">Performance Metrics</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-400">Efficiency</span>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-20 bg-gray-700 rounded-full h-2">
+                                                <div class="bg-green-500 h-2 rounded-full" style="width: ${user.performance.efficiency}%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold">${user.performance.efficiency}%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-400">Quality</span>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-20 bg-gray-700 rounded-full h-2">
+                                                <div class="bg-blue-500 h-2 rounded-full" style="width: ${user.performance.quality}%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold">${user.performance.quality}%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-400">Collaboration</span>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-20 bg-gray-700 rounded-full h-2">
+                                                <div class="bg-purple-500 h-2 rounded-full" style="width: ${user.performance.collaboration}%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold">${user.performance.collaboration}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-purple-400">Skills & Certifications</h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <span class="text-sm text-gray-400 block mb-2">Skills:</span>
+                                        <div class="flex flex-wrap gap-1">
+                                            ${user.skills.map(skill => `<span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">${skill}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm text-gray-400 block mb-2">Certifications:</span>
+                                        <div class="flex flex-wrap gap-1">
+                                            ${user.certifications.map(cert => `<span class="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">${cert}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-yellow-400">Current Projects</h3>
+                                <div class="space-y-2">
+                                    ${user.currentProjects.map(project => `
+                                        <div class="text-sm p-2 bg-white/5 rounded border-l-2 border-yellow-400">
+                                            ${project}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-red-400">Quick Stats</h3>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-400">${user.tasksCompleted}</div>
+                                        <div class="text-gray-400">Tasks Completed</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-green-400">${user.productivity}%</div>
+                                        <div class="text-gray-400">Productivity</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-purple-400">${user.avgResponseTime}h</div>
+                                        <div class="text-gray-400">Avg Response</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-yellow-400">${user.workingHours.start}-${user.workingHours.end}</div>
+                                        <div class="text-gray-400">Working Hours</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        function showTaskDetails(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-xl p-6 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">${task.title}</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 space-y-4">
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-blue-400">Description</h3>
+                                <p class="text-gray-300">${task.description}</p>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-green-400">Subtasks</h3>
+                                <div class="space-y-2">
+                                    ${task.subtasks.map(subtask => `
+                                        <div class="flex items-center space-x-3 p-2 bg-white/5 rounded">
+                                            <div class="w-4 h-4 rounded border-2 ${subtask.completed ? 'bg-green-500 border-green-500' : 'border-gray-400'} flex items-center justify-center">
+                                                ${subtask.completed ? '<span class="text-white text-xs">✓</span>' : ''}
+                                            </div>
+                                            <span class="${subtask.completed ? 'line-through text-gray-400' : 'text-white'}">${subtask.title}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            ${task.dependencies.length > 0 ? `
+                                <div class="bg-black/20 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-3 text-yellow-400">Dependencies</h3>
+                                    <div class="space-y-1">
+                                        ${task.dependencies.map(dep => `<div class="text-sm text-gray-300">• ${dep}</div>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${task.blockers.length > 0 ? `
+                                <div class="bg-black/20 rounded-lg p-4 border-l-4 border-red-500">
+                                    <h3 class="font-semibold mb-3 text-red-400">Blockers</h3>
+                                    <div class="space-y-1">
+                                        ${task.blockers.map(blocker => `<div class="text-sm text-red-300">🚫 ${blocker}</div>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-purple-400">Task Details</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div><span class="text-gray-400">Assignee:</span> ${task.assignee}</div>
+                                    <div><span class="text-gray-400">Priority:</span> <span class="px-2 py-1 rounded text-xs ${task.priority === 'critical' ? 'bg-red-500/20 text-red-400' : task.priority === 'high' ? 'bg-red-400/20 text-red-400' : task.priority === 'medium' ? 'bg-yellow-400/20 text-yellow-400' : 'bg-green-400/20 text-green-400'}">${task.priority.toUpperCase()}</span></div>
+                                    <div><span class="text-gray-400">Status:</span> ${task.status}</div>
+                                    <div><span class="text-gray-400">Start Date:</span> ${new Date(task.startDate).toLocaleDateString()}</div>
+                                    <div><span class="text-gray-400">Due Date:</span> ${new Date(task.dueDate).toLocaleDateString()}</div>
+                                    <div><span class="text-gray-400">Progress:</span> ${task.progress}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-green-400">Time Tracking</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-400">Estimated:</span>
+                                        <span>${task.estimatedHours}h</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-400">Actual:</span>
+                                        <span>${task.actualHours}h</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-gray-400">Remaining:</span>
+                                        <span>${Math.max(0, task.estimatedHours - task.actualHours)}h</span>
+                                    </div>
+                                    <div class="w-full bg-gray-700 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: ${Math.min(100, (task.actualHours / task.estimatedHours) * 100)}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-yellow-400">Tags</h3>
+                                <div class="flex flex-wrap gap-1">
+                                    ${task.tags.map(tag => `<span class="text-xs px-2 py-1 bg-gray-600/30 text-gray-300 rounded">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="bg-black/20 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3 text-red-400">Activity</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Comments:</span>
+                                        <span>${task.comments}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Attachments:</span>
+                                        <span>${task.attachments}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        function showUserAnalytics(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            const userTasks = tasks.filter(t => t.assignee === user.name);
+            const completedTasks = userTasks.filter(t => t.status === 'completed');
+            const avgCompletionTime = completedTasks.length > 0 ? 
+                completedTasks.reduce((sum, t) => sum + t.actualHours, 0) / completedTasks.length : 0;
+            
+            addChatMessage('System', `📊 Analytics for ${user.name}:
+            
+            🎯 Performance Overview:
+            • Overall Productivity: ${user.productivity}%
+            • Tasks Completed: ${user.tasksCompleted}
+            • Average Response Time: ${user.avgResponseTime} hours
+            
+            📈 Detailed Metrics:
+            • Efficiency Score: ${user.performance.efficiency}%
+            • Quality Score: ${user.performance.quality}%
+            • Collaboration Score: ${user.performance.collaboration}%
+            
+            📋 Current Workload:
+            • Active Tasks: ${userTasks.filter(t => t.status === 'inprogress').length}
+            • Pending Tasks: ${userTasks.filter(t => t.status === 'todo').length}
+            • Completed Tasks: ${completedTasks.length}
+            • Average Completion Time: ${avgCompletionTime.toFixed(1)} hours
+            
+            💡 Recommendations:
+            ${user.productivity > 90 ? '• Excellent performance! Consider mentoring junior team members.' : 
+              user.productivity > 80 ? '• Good performance. Focus on optimizing workflow efficiency.' : 
+              '• Consider additional training or workload adjustment.'}
+            ${user.performance.collaboration < 85 ? '• Improve collaboration through team activities.' : ''}
+            ${userTasks.filter(t => new Date(t.dueDate) < new Date() && t.status !== 'completed').length > 0 ? 
+              '• Address overdue tasks immediately.' : ''}
+            `);
+        }
+
+        function startRealTimeUpdates() {
+            // Update dashboard stats every 5 seconds
+            setInterval(() => {
+                updateDashboardStats();
+                
+                // Simulate real-time user activity updates
+                users.forEach(user => {
+                    if (Math.random() > 0.95) { // 5% chance per update
+                        user.lastActive = new Date();
+                        if (user.status === 'offline' && Math.random() > 0.7) {
+                            user.status = 'online';
+                            addActivity(`${user.name} came online`);
+                        }
+                    }
+                });
+                
+                // Simulate task progress updates
+                tasks.forEach(task => {
+                    if (task.status === 'inprogress' && Math.random() > 0.98) { // 2% chance
+                        task.progress = Math.min(100, task.progress + Math.floor(Math.random() * 10));
+                        task.actualHours += Math.random() * 2;
+                        addActivity(`Progress updated: ${task.title} (${task.progress}%)`);
+                    }
+                });
+                
+                // Re-render if there were updates
+                renderUsers();
+                renderTasks();
+                
+                // Add random system activities
+                const systemActivities = [
+                    "System backup completed successfully",
+                    "Performance metrics updated",
+                    "Security scan completed - no issues found",
+                    "Database optimization completed",
+                    "New deployment pipeline executed",
+                    "User session data synchronized",
+                    "API rate limits adjusted automatically",
+                    "Cache invalidation completed"
+                ];
+                
+                if (Math.random() > 0.85) { // 15% chance
+                    addActivity(systemActivities[Math.floor(Math.random() * systemActivities.length)]);
+                }
+            }, 5000);
+        }
+
+        function addNewUser() {
+            const name = prompt("Enter user name:");
+            const email = prompt("Enter user email:");
+            const role = prompt("Enter user role:");
+            
+            if (name && email && role) {
+                const newUser = {
+                    id: users.length + 1,
+                    name,
+                    email,
+                    status: "online",
+                    role,
+                    lastActive: "just now"
+                };
+                users.push(newUser);
+                renderUsers();
+                addActivity(`New user added: ${name}`);
+            }
+        }
+
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                const newName = prompt("Edit name:", user.name);
+                const newRole = prompt("Edit role:", user.role);
+                
+                if (newName) user.name = newName;
+                if (newRole) user.role = newRole;
+                
+                renderUsers();
+                addActivity(`User updated: ${user.name}`);
+            }
+        }
+
+        function addNewTask() {
+            const title = prompt("Enter task title:");
+            const assignee = prompt("Enter assignee:");
+            const priority = prompt("Enter priority (high/medium/low):");
+            
+            if (title && assignee && priority) {
+                const newTask = {
+                    id: tasks.length + 1,
+                    title,
+                    assignee,
+                    priority,
+                    status: "todo"
+                };
+                tasks.push(newTask);
+                renderTasks();
+                addActivity(`New task created: ${title}`);
+            }
+        }
+
+        function updateTaskStatus(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                const statuses = ['todo', 'inprogress', 'completed'];
+                const currentIndex = statuses.indexOf(task.status);
+                const nextIndex = (currentIndex + 1) % statuses.length;
+                task.status = statuses[nextIndex];
+                
+                renderTasks();
+                addActivity(`Task status updated: ${task.title} → ${task.status}`);
+            }
+        }
+
+        // OpenAI API Integration
+        async function callOpenAI(message, context = '') {
+            try {
+                const systemPrompt = `You are an AI work management assistant. You have access to the following data:
+                Users: ${JSON.stringify(users)}
+                Tasks: ${JSON.stringify(tasks)}
+                Recent Activities: ${JSON.stringify(activities.slice(0, 5))}
+                
+                Provide helpful insights, analysis, and recommendations based on this data. Be concise and actionable.`;
+
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_CONFIG.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: OPENAI_CONFIG.model,
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: message }
+                        ],
+                        max_tokens: OPENAI_CONFIG.maxTokens,
+                        temperature: OPENAI_CONFIG.temperature
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`OpenAI API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error('OpenAI API Error:', error);
+                return generateFallbackResponse(message);
+            }
+        }
+
+        function generateFallbackResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            const stats = calculateRealTimeStats();
+            const overdueTasks = tasks.filter(t => new Date(t.dueDate) < new Date() && t.status !== 'completed');
+            const highPriorityTasks = tasks.filter(t => (t.priority === 'critical' || t.priority === 'high') && t.status !== 'completed');
+            const avgProductivity = Math.round(users.reduce((sum, u) => sum + u.productivity, 0) / users.length);
+            const topPerformers = users.filter(u => u.productivity > 90).sort((a, b) => b.productivity - a.productivity);
+            const underPerformers = users.filter(u => u.productivity < 80);
+            
+            if (lowerMessage.includes('analyze') || lowerMessage.includes('analysis')) {
+                return `📊 **Advanced Data Analysis**:
+
+**Team Overview:**
+• Total Team Members: ${users.length}
+• Currently Active: ${stats.activeUsers} (${Math.round((stats.activeUsers/users.length)*100)}%)
+• Average Team Productivity: ${avgProductivity}%
+• Department Distribution: ${[...new Set(users.map(u => u.department))].join(', ')}
+
+**Task Analytics:**
+• Total Tasks: ${tasks.length}
+• In Progress: ${stats.activeTasks} (${Math.round((stats.activeTasks/tasks.length)*100)}%)
+• Completed: ${stats.completedTasks} (${Math.round((stats.completedTasks/tasks.length)*100)}%)
+• Overdue: ${overdueTasks.length} tasks requiring immediate attention
+• Critical/High Priority: ${highPriorityTasks.length} tasks
+
+**Performance Insights:**
+• Top Performers: ${topPerformers.slice(0,2).map(u => `${u.name} (${u.productivity}%)`).join(', ')}
+• Needs Support: ${underPerformers.length} team members below 80% productivity
+• Average Response Time: ${Math.round(users.reduce((sum, u) => sum + u.avgResponseTime, 0) / users.length * 10) / 10}h
+
+**Recommendations:**
+${overdueTasks.length > 0 ? `🚨 Address ${overdueTasks.length} overdue tasks immediately` : '✅ No overdue tasks'}
+${highPriorityTasks.length > 3 ? `⚡ Focus resources on ${highPriorityTasks.length} high-priority items` : ''}
+${underPerformers.length > 0 ? `👥 Provide additional support to ${underPerformers.length} team members` : ''}`;
+            }
+            
+            if (lowerMessage.includes('report') || lowerMessage.includes('summary')) {
+                const timeTracking = tasks.reduce((acc, t) => {
+                    acc.estimated += t.estimatedHours;
+                    acc.actual += t.actualHours;
+                    return acc;
+                }, { estimated: 0, actual: 0 });
+                
+                return `📈 **Comprehensive Productivity Report**:
+
+**Executive Summary:**
+• Team Efficiency: ${Math.round((timeTracking.estimated / timeTracking.actual) * 100)}% (${timeTracking.actual}h/${timeTracking.estimated}h)
+• Project Velocity: ${Math.round((stats.completedTasks / tasks.length) * 100)}% completion rate
+• Resource Utilization: ${Math.round((stats.activeTasks / users.length) * 100)}% active task ratio
+
+**Department Performance:**
+${[...new Set(users.map(u => u.department))].map(dept => {
+    const deptUsers = users.filter(u => u.department === dept);
+    const deptAvg = Math.round(deptUsers.reduce((sum, u) => sum + u.productivity, 0) / deptUsers.length);
+    return `• ${dept}: ${deptAvg}% avg productivity (${deptUsers.length} members)`;
+}).join('\n')}
+
+**Task Distribution:**
+• Todo: ${tasks.filter(t => t.status === 'todo').length} tasks
+• In Progress: ${stats.activeTasks} tasks  
+• Completed: ${stats.completedTasks} tasks
+• Blocked: ${tasks.filter(t => t.blockers.length > 0).length} tasks
+
+**Quality Metrics:**
+• Average Task Progress: ${Math.round(tasks.reduce((sum, t) => sum + t.progress, 0) / tasks.length)}%
+• Comments per Task: ${Math.round(tasks.reduce((sum, t) => sum + t.comments, 0) / tasks.length)}
+• Collaboration Score: ${Math.round(users.reduce((sum, u) => sum + u.performance.collaboration, 0) / users.length)}%
+
+**Strategic Recommendations:**
+${avgProductivity > 90 ? '🎯 Excellent team performance - consider expanding scope' : avgProductivity > 80 ? '📈 Good performance - optimize workflows for efficiency gains' : '🔧 Performance improvement needed - implement support programs'}`;
+            }
+            
+            if (lowerMessage.includes('optimize') || lowerMessage.includes('improve')) {
+                const bottlenecks = tasks.filter(t => t.blockers.length > 0);
+                const resourceImbalance = users.some(u => tasks.filter(t => t.assignee === u.name && t.status !== 'completed').length > 3);
+                
+                return `⚡ **Advanced Optimization Strategy**:
+
+**Immediate Actions:**
+${overdueTasks.length > 0 ? `🚨 1. Resolve ${overdueTasks.length} overdue tasks: ${overdueTasks.slice(0,2).map(t => t.title).join(', ')}${overdueTasks.length > 2 ? '...' : ''}` : ''}
+${bottlenecks.length > 0 ? `🚫 2. Clear ${bottlenecks.length} blocked tasks: ${bottlenecks.map(t => t.title).join(', ')}` : ''}
+${resourceImbalance ? '⚖️ 3. Rebalance workload - some team members are overloaded' : ''}
+
+**Workflow Improvements:**
+• Implement daily standups for ${tasks.filter(t => t.status === 'inprogress').length} active tasks
+• Set up automated progress tracking for better visibility
+• Create task templates for recurring work patterns
+• Establish clear escalation paths for blocked items
+
+**Resource Optimization:**
+${topPerformers.length > 0 ? `• Leverage top performers (${topPerformers.slice(0,2).map(u => u.name).join(', ')}) for mentoring` : ''}
+${underPerformers.length > 0 ? `• Provide additional training for ${underPerformers.length} team members` : ''}
+• Cross-train team members on critical skills: ${[...new Set(tasks.flatMap(t => t.tags))].slice(0,3).join(', ')}
+
+**Technology Enhancements:**
+• Implement automated testing for ${tasks.filter(t => t.tags.includes('Backend')).length} backend tasks
+• Set up monitoring dashboards for real-time visibility
+• Create integration pipelines for faster deployment
+
+**Expected Impact:**
+• 15-25% improvement in task completion velocity
+• 30% reduction in blocked tasks through better dependency management
+• 20% increase in team productivity through optimized workflows`;
+            }
+            
+            if (lowerMessage.includes('user') || lowerMessage.includes('team')) {
+                return `👥 **Comprehensive Team Analysis**:
+
+**Team Composition:**
+• Total Members: ${users.length} across ${[...new Set(users.map(u => u.department))].length} departments
+• Experience Levels: ${users.filter(u => u.level === 'Senior').length} Senior, ${users.filter(u => u.level === 'Lead').length} Lead
+• Geographic Distribution: ${[...new Set(users.map(u => u.location.split(',')[1]?.trim()))].filter(Boolean).join(', ')}
+
+**Current Status:**
+• Online: ${users.filter(u => u.status === 'online').length} members
+• Busy: ${users.filter(u => u.status === 'busy').length} members  
+• Offline: ${users.filter(u => u.status === 'offline').length} members
+
+**Performance Distribution:**
+• High Performers (>90%): ${topPerformers.length} - ${topPerformers.map(u => u.name).join(', ')}
+• Solid Contributors (80-90%): ${users.filter(u => u.productivity >= 80 && u.productivity <= 90).length}
+• Needs Support (<80%): ${underPerformers.length}${underPerformers.length > 0 ? ` - ${underPerformers.map(u => u.name).join(', ')}` : ''}
+
+**Skills Matrix:**
+${[...new Set(users.flatMap(u => u.skills))].slice(0,5).map(skill => {
+    const count = users.filter(u => u.skills.includes(skill)).length;
+    return `• ${skill}: ${count} team members`;
+}).join('\n')}
+
+**Workload Analysis:**
+${users.map(u => {
+    const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+    return `• ${u.name}: ${userTasks.length} active tasks (${u.productivity}% productivity)`;
+}).join('\n')}
+
+**Team Health Indicators:**
+• Average Collaboration Score: ${Math.round(users.reduce((sum, u) => sum + u.performance.collaboration, 0) / users.length)}%
+• Response Time: ${Math.round(users.reduce((sum, u) => sum + u.avgResponseTime, 0) / users.length * 10) / 10}h average
+• Retention Risk: ${users.filter(u => u.productivity < 70).length} members may need attention
+
+**Recommendations:**
+${topPerformers.length > 0 ? `🌟 Recognize top performers: ${topPerformers.slice(0,2).map(u => u.name).join(', ')}` : ''}
+${underPerformers.length > 0 ? `🎯 Schedule 1:1s with underperforming members` : ''}
+• Implement peer mentoring program
+• Consider team building activities to improve collaboration`;
+            }
+            
+            if (lowerMessage.includes('bottleneck') || lowerMessage.includes('block')) {
+                const blockedTasks = tasks.filter(t => t.blockers.length > 0);
+                const dependencyIssues = tasks.filter(t => t.dependencies.length > 0 && t.status === 'todo');
+                
+                return `🔍 **Bottleneck Analysis**:
+
+**Current Blockers:**
+${blockedTasks.length > 0 ? blockedTasks.map(t => `• ${t.title}: ${t.blockers.join(', ')}`).join('\n') : '✅ No active blockers detected'}
+
+**Dependency Chains:**
+${dependencyIssues.length > 0 ? dependencyIssues.map(t => `• ${t.title} waiting for: ${t.dependencies.join(', ')}`).join('\n') : '✅ No dependency issues'}
+
+**Resource Constraints:**
+${users.filter(u => tasks.filter(t => t.assignee === u.name && t.status !== 'completed').length > 3).map(u => `• ${u.name}: Overloaded with ${tasks.filter(t => t.assignee === u.name && t.status !== 'completed').length} tasks`).join('\n')}
+
+**Resolution Strategy:**
+1. Immediate escalation for ${blockedTasks.length} blocked items
+2. Dependency mapping and parallel work identification  
+3. Resource reallocation for overloaded team members
+4. Process improvements to prevent future bottlenecks`;
+            }
+            
+            return `🤖 **AI Assistant Ready**: I've analyzed your workspace data comprehensively. 
+
+**Quick Stats:**
+• ${users.length} team members, ${stats.activeUsers} currently active
+• ${tasks.length} total tasks, ${stats.activeTasks} in progress
+• ${avgProductivity}% average team productivity
+• ${overdueTasks.length} overdue items need attention
+
+**I can help you with:**
+• Detailed performance analytics and team insights
+• Task optimization and workflow improvements  
+• Resource allocation and workload balancing
+• Bottleneck identification and resolution strategies
+• Custom reports and data visualization
+
+**Try asking:** "Analyze team performance trends" or "Suggest workflow optimizations" or "Generate executive summary report"`;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const message = input.value.trim();
+            
+            if (message) {
+                addChatMessage('You', message);
+                input.value = '';
+                
+                // Show loading state
+                sendButton.textContent = 'Thinking...';
+                sendButton.disabled = true;
+                
+                // Add typing indicator
+                addChatMessage('OpenAI', '💭 Analyzing your request...');
+                
+                try {
+                    const response = await callOpenAI(message);
+                    
+                    // Remove typing indicator
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.removeChild(chatMessages.lastChild);
+                    
+                    addChatMessage('OpenAI', response);
+                    addActivity(`AI Assistant: Processed query about ${message.substring(0, 30)}...`);
+                } catch (error) {
+                    console.error('Error:', error);
+                    addChatMessage('OpenAI', '❌ Sorry, I encountered an error. Please check your API configuration and try again.');
+                } finally {
+                    sendButton.textContent = 'Send';
+                    sendButton.disabled = false;
+                }
+            }
+        }
+
+        function quickPrompt(prompt) {
+            document.getElementById('chatInput').value = prompt;
+            sendMessage();
+        }
+
+        // API Configuration Management
+        function toggleApiConfig() {
+            const panel = document.getElementById('apiConfigPanel');
+            panel.classList.toggle('hidden');
+            
+            // Load saved configuration
+            const savedKey = localStorage.getItem('openai_api_key');
+            const savedModel = localStorage.getItem('openai_model');
+            
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+            if (savedModel) {
+                document.getElementById('modelSelect').value = savedModel;
+            }
+        }
+
+        function saveApiConfig() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            const model = document.getElementById('modelSelect').value;
+            
+            if (apiKey) {
+                localStorage.setItem('openai_api_key', apiKey);
+                localStorage.setItem('openai_model', model);
+                
+                OPENAI_CONFIG.apiKey = apiKey;
+                OPENAI_CONFIG.model = model;
+                
+                addActivity('OpenAI configuration updated successfully');
+                addChatMessage('System', '✅ OpenAI configuration saved! You can now use advanced AI features.');
+            } else {
+                addChatMessage('System', '❌ Please enter a valid API key.');
+            }
+        }
+
+        async function testApiConnection() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            
+            if (!apiKey) {
+                addChatMessage('System', '❌ Please enter an API key first.');
+                return;
+            }
+            
+            addChatMessage('System', '🔄 Testing OpenAI connection...');
+            
+            try {
+                const response = await fetch('https://api.openai.com/v1/models', {
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`
+                    }
+                });
+                
+                if (response.ok) {
+                    addChatMessage('System', '✅ OpenAI connection successful! API key is valid.');
+                    addActivity('OpenAI API connection test passed');
+                } else {
+                    addChatMessage('System', '❌ OpenAI connection failed. Please check your API key.');
+                }
+            } catch (error) {
+                addChatMessage('System', '❌ Connection test failed. Please check your internet connection and API key.');
+            }
+        }
+
+        // Load saved configuration on startup
+        function loadSavedConfig() {
+            const savedKey = localStorage.getItem('openai_api_key');
+            const savedModel = localStorage.getItem('openai_model');
+            
+            if (savedKey) {
+                OPENAI_CONFIG.apiKey = savedKey;
+            }
+            if (savedModel) {
+                OPENAI_CONFIG.model = savedModel;
+            }
+        }
+
+        function addChatMessage(sender, message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'text-sm text-gray-300 mb-2';
+            messageDiv.innerHTML = `<span class="${sender === 'AI' ? 'text-blue-400' : 'text-green-400'}">${sender}:</span> ${message}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Advanced Features - Time Tracking
+        let timeTracker = {
+            isRunning: false,
+            startTime: null,
+            elapsedTime: 0,
+            currentTask: null,
+            dailyTotal: 0,
+            interval: null
+        };
+
+        function startTimer() {
+            if (!timeTracker.currentTask) {
+                const taskTitle = prompt("Enter task name to track:");
+                if (!taskTitle) return;
+                timeTracker.currentTask = taskTitle;
+                document.getElementById('activeTask').textContent = taskTitle;
+            }
+            
+            timeTracker.isRunning = true;
+            timeTracker.startTime = Date.now() - timeTracker.elapsedTime;
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = false;
+            
+            timeTracker.interval = setInterval(updateTimer, 1000);
+            addActivity(`⏱️ Started timer for: ${timeTracker.currentTask}`);
+        }
+
+        function pauseTimer() {
+            timeTracker.isRunning = false;
+            clearInterval(timeTracker.interval);
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            
+            addActivity(`⏸️ Paused timer for: ${timeTracker.currentTask}`);
+        }
+
+        function stopTimer() {
+            timeTracker.isRunning = false;
+            clearInterval(timeTracker.interval);
+            
+            const totalMinutes = Math.floor(timeTracker.elapsedTime / 60000);
+            timeTracker.dailyTotal += totalMinutes;
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('activeTimer').textContent = '--:--:--';
+            document.getElementById('activeTask').textContent = 'No active task';
+            
+            addActivity(`⏹️ Completed: ${timeTracker.currentTask} (${Math.floor(totalMinutes/60)}h ${totalMinutes%60}m)`);
+            
+            // Reset timer
+            timeTracker.elapsedTime = 0;
+            timeTracker.currentTask = null;
+            
+            updateDailyStats();
+        }
+
+        function updateTimer() {
+            if (timeTracker.isRunning) {
+                timeTracker.elapsedTime = Date.now() - timeTracker.startTime;
+                const totalSeconds = Math.floor(timeTracker.elapsedTime / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                document.getElementById('activeTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function updateDailyStats() {
+            const hours = Math.floor(timeTracker.dailyTotal / 60);
+            const minutes = timeTracker.dailyTotal % 60;
+            document.getElementById('todayTotal').textContent = `${hours}h ${minutes}m`;
+            
+            // Update billable time (assuming 90% is billable)
+            const billableMinutes = Math.floor(timeTracker.dailyTotal * 0.9);
+            const billableHours = Math.floor(billableMinutes / 60);
+            document.getElementById('billableTime').textContent = `${billableHours}h ${billableMinutes % 60}m`;
+        }
+
+        function generateTimeReport() {
+            const report = `📊 **Time Tracking Report - ${new Date().toLocaleDateString()}**
+
+**Daily Summary:**
+• Total Time Tracked: ${document.getElementById('todayTotal').textContent}
+• Billable Hours: ${document.getElementById('billableTime').textContent}
+• Tasks Completed: ${document.getElementById('tasksToday').textContent}
+• Average Task Duration: ${Math.round(timeTracker.dailyTotal / 8)} minutes
+
+**Productivity Insights:**
+• Focus Time: ${Math.round(timeTracker.dailyTotal * 0.7)} minutes
+• Break Time: ${Math.round(timeTracker.dailyTotal * 0.3)} minutes
+• Efficiency Score: ${Math.min(100, Math.round((timeTracker.dailyTotal / 480) * 100))}%
+
+**Recommendations:**
+${timeTracker.dailyTotal > 480 ? '🎯 Excellent productivity! Consider taking breaks.' : 
+  timeTracker.dailyTotal > 240 ? '📈 Good progress. Maintain momentum.' : 
+  '⚡ Consider time-blocking for better focus.'}`;
+
+            addChatMessage('Time Tracker', report);
+        }
+
+        // Advanced Features - Smart Alerts & Notifications
+        let notificationsEnabled = false;
+        let alertRules = [
+            { id: 1, type: 'overdue', threshold: 1, active: true },
+            { id: 2, type: 'capacity', threshold: 80, active: true },
+            { id: 3, type: 'meeting', threshold: 120, active: true }
+        ];
+
+        function toggleNotifications() {
+            notificationsEnabled = !notificationsEnabled;
+            const toggle = document.getElementById('notifToggle');
+            toggle.textContent = notificationsEnabled ? '🔔 Disable' : '🔕 Enable';
+            
+            if (notificationsEnabled && 'Notification' in window) {
+                Notification.requestPermission();
+            }
+            
+            addActivity(`Notifications ${notificationsEnabled ? 'enabled' : 'disabled'}`);
+        }
+
+        function resolveAlert(alertId) {
+            const alertElement = event.target.closest('.bg-red-500\\/20, .bg-yellow-500\\/20, .bg-blue-500\\/20');
+            if (alertElement) {
+                alertElement.style.opacity = '0.5';
+                alertElement.style.pointerEvents = 'none';
+                setTimeout(() => alertElement.remove(), 500);
+            }
+            addActivity(`Alert #${alertId} resolved`);
+        }
+
+        function createCustomAlert() {
+            const type = prompt("Alert type (overdue/capacity/meeting):");
+            const threshold = prompt("Threshold value:");
+            const message = prompt("Alert message:");
+            
+            if (type && threshold && message) {
+                const newAlert = {
+                    id: Date.now(),
+                    type,
+                    threshold: parseInt(threshold),
+                    message,
+                    active: true
+                };
+                alertRules.push(newAlert);
+                addActivity(`Custom alert rule created: ${type}`);
+                addChatMessage('Alert System', `✅ New alert rule created: "${message}" (${type} > ${threshold})`);
+            }
+        }
+
+        // Advanced Features - Resource Management & Analytics
+        function refreshAnalytics() {
+            // Simulate analytics refresh with random variations
+            const sprintProgress = Math.min(100, Math.max(60, parseInt(document.getElementById('sprintProgress').textContent) + (Math.random() - 0.5) * 10));
+            const velocityPoints = Math.max(30, parseInt(document.getElementById('velocityPoints').textContent) + Math.floor((Math.random() - 0.5) * 8));
+            
+            document.getElementById('sprintProgress').textContent = `${Math.round(sprintProgress)}%`;
+            document.getElementById('velocityPoints').textContent = velocityPoints;
+            
+            // Update progress bar
+            document.querySelector('#sprintProgress').parentElement.nextElementSibling.firstElementChild.style.width = `${sprintProgress}%`;
+            
+            renderCapacityChart();
+            addActivity('📊 Analytics refreshed with latest data');
+        }
+
+        function renderCapacityChart() {
+            const capacityChart = document.getElementById('capacityChart');
+            capacityChart.innerHTML = users.map(user => {
+                const userTasks = tasks.filter(t => t.assignee === user.name && t.status !== 'completed');
+                const capacity = Math.min(100, (userTasks.length / 4) * 100); // Assuming 4 tasks = 100% capacity
+                const color = capacity > 80 ? 'bg-red-500' : capacity > 60 ? 'bg-yellow-500' : 'bg-green-500';
+                
+                return `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-gray-300 w-24 truncate">${user.name.split(' ')[0]}</span>
+                        <div class="flex-1 mx-3">
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="${color} h-2 rounded-full transition-all duration-500" style="width: ${capacity}%"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-400 w-12 text-right">${Math.round(capacity)}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function optimizeResources() {
+            const overloaded = users.filter(u => {
+                const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                return userTasks.length > 3;
+            });
+            
+            const available = users.filter(u => {
+                const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                return userTasks.length < 2;
+            });
+            
+            document.getElementById('overloadedCount').textContent = overloaded.length;
+            document.getElementById('availableCount').textContent = available.length;
+            
+            const optimization = `🔧 **Resource Optimization Analysis**
+
+**Current State:**
+• Overloaded: ${overloaded.map(u => u.name).join(', ')}
+• Available: ${available.map(u => u.name).join(', ')}
+
+**Recommendations:**
+${overloaded.length > 0 && available.length > 0 ? 
+  `• Redistribute ${Math.min(overloaded.length * 2, available.length)} tasks from overloaded to available team members` :
+  overloaded.length > 0 ? '• Consider hiring additional resources or extending deadlines' :
+  '• Team capacity is well balanced'}
+
+**Suggested Actions:**
+• Implement daily capacity monitoring
+• Set up automatic workload alerts
+• Create task redistribution workflows
+• Schedule regular capacity planning sessions`;
+
+            addChatMessage('Resource Manager', optimization);
+            addActivity('⚡ Resource optimization analysis completed');
+        }
+
+        function showWorkloadBalancer() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">🔄 Workload Balancer</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-semibold mb-3 text-red-400">Overloaded Team Members</h3>
+                            <div class="space-y-2">
+                                ${users.filter(u => {
+                                    const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                                    return userTasks.length > 3;
+                                }).map(user => {
+                                    const userTasks = tasks.filter(t => t.assignee === user.name && t.status !== 'completed');
+                                    return `
+                                        <div class="bg-red-500/20 p-3 rounded border border-red-500/30">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium">${user.name}</span>
+                                                <span class="text-red-400">${userTasks.length} tasks</span>
+                                            </div>
+                                            <div class="text-xs text-gray-400">
+                                                ${userTasks.slice(0, 2).map(t => `• ${t.title}`).join('<br>')}
+                                                ${userTasks.length > 2 ? `<br>• +${userTasks.length - 2} more...` : ''}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold mb-3 text-green-400">Available Team Members</h3>
+                            <div class="space-y-2">
+                                ${users.filter(u => {
+                                    const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                                    return userTasks.length < 3;
+                                }).map(user => {
+                                    const userTasks = tasks.filter(t => t.assignee === user.name && t.status !== 'completed');
+                                    return `
+                                        <div class="bg-green-500/20 p-3 rounded border border-green-500/30">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium">${user.name}</span>
+                                                <span class="text-green-400">${userTasks.length} tasks</span>
+                                            </div>
+                                            <div class="text-xs text-gray-400">
+                                                Capacity: ${Math.round((3 - userTasks.length) / 3 * 100)}% available
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-white/10">
+                        <button onclick="executeRebalancing(); this.closest('.fixed').remove();" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded transition-colors">
+                            ⚡ Execute Auto-Rebalancing
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function executeRebalancing() {
+            // Simulate task rebalancing
+            const overloadedUsers = users.filter(u => {
+                const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                return userTasks.length > 3;
+            });
+            
+            const availableUsers = users.filter(u => {
+                const userTasks = tasks.filter(t => t.assignee === u.name && t.status !== 'completed');
+                return userTasks.length < 2;
+            });
+            
+            let rebalanced = 0;
+            overloadedUsers.forEach(overloadedUser => {
+                const userTasks = tasks.filter(t => t.assignee === overloadedUser.name && t.status !== 'completed');
+                if (userTasks.length > 3 && availableUsers.length > 0) {
+                    const taskToMove = userTasks[userTasks.length - 1];
+                    const targetUser = availableUsers[rebalanced % availableUsers.length];
+                    taskToMove.assignee = targetUser.name;
+                    rebalanced++;
+                }
+            });
+            
+            renderTasks();
+            addActivity(`🔄 Workload rebalanced: ${rebalanced} tasks redistributed`);
+            addChatMessage('Workload Balancer', `✅ Successfully rebalanced ${rebalanced} tasks across available team members.`);
+        }
+
+        // Advanced Features - Automation & Workflows
+        function bulkAssign() {
+            const assignee = prompt("Assign all unassigned tasks to:");
+            if (assignee) {
+                const unassignedTasks = tasks.filter(t => !t.assignee || t.assignee === 'Unassigned');
+                unassignedTasks.forEach(task => task.assignee = assignee);
+                renderTasks();
+                addActivity(`📋 Bulk assigned ${unassignedTasks.length} tasks to ${assignee}`);
+            }
+        }
+
+        function generateStandup() {
+            const standupNotes = `📝 **Daily Standup Notes - ${new Date().toLocaleDateString()}**
+
+**Team Status:**
+${users.map(user => {
+    const userTasks = tasks.filter(t => t.assignee === user.name);
+    const completed = userTasks.filter(t => t.status === 'completed').length;
+    const inProgress = userTasks.filter(t => t.status === 'inprogress').length;
+    const blocked = userTasks.filter(t => t.blockers && t.blockers.length > 0).length;
+    
+    return `• **${user.name}**: ${completed} completed, ${inProgress} in progress${blocked > 0 ? `, ${blocked} blocked` : ''}`;
+}).join('\n')}
+
+**Key Metrics:**
+• Sprint Progress: ${document.getElementById('sprintProgress').textContent}
+• Velocity: ${document.getElementById('velocityPoints').textContent} story points
+• Team Productivity: ${Math.round(users.reduce((sum, u) => sum + u.productivity, 0) / users.length)}%
+
+**Action Items:**
+${tasks.filter(t => t.blockers && t.blockers.length > 0).map(t => `• Unblock: ${t.title}`).join('\n')}
+${tasks.filter(t => new Date(t.dueDate) < new Date() && t.status !== 'completed').map(t => `• Urgent: ${t.title} (overdue)`).join('\n')}`;
+
+            addChatMessage('Standup Generator', standupNotes);
+            addActivity('📝 Daily standup notes generated');
+        }
+
+        function scheduleReview() {
+            const reviewType = prompt("Review type (sprint/performance/code):");
+            const date = prompt("Schedule for (YYYY-MM-DD):");
+            
+            if (reviewType && date) {
+                addActivity(`📅 ${reviewType} review scheduled for ${date}`);
+                addChatMessage('Scheduler', `✅ ${reviewType.charAt(0).toUpperCase() + reviewType.slice(1)} review scheduled for ${new Date(date).toLocaleDateString()}`);
+            }
+        }
+
+        function exportData() {
+            const exportData = {
+                users: users,
+                tasks: tasks,
+                activities: activities,
+                timestamp: new Date().toISOString(),
+                analytics: {
+                    sprintProgress: document.getElementById('sprintProgress').textContent,
+                    velocityPoints: document.getElementById('velocityPoints').textContent,
+                    teamProductivity: Math.round(users.reduce((sum, u) => sum + u.productivity, 0) / users.length)
+                }
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `workspace-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            addActivity('💾 Workspace data exported successfully');
+        }
+
+        function createWorkflow() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-xl p-6 max-w-2xl w-full mx-4">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">✨ Create Workflow</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Workflow Name</label>
+                            <input type="text" id="workflowName" placeholder="e.g., Auto-assign new tasks" 
+                                   class="w-full bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Trigger</label>
+                            <select id="workflowTrigger" class="w-full bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                                <option value="task_created">When task is created</option>
+                                <option value="task_overdue">When task becomes overdue</option>
+                                <option value="user_capacity">When user reaches capacity</option>
+                                <option value="daily">Daily at specific time</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Action</label>
+                            <select id="workflowAction" class="w-full bg-black/20 border border-white/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                                <option value="assign_user">Assign to specific user</option>
+                                <option value="send_notification">Send notification</option>
+                                <option value="update_priority">Update task priority</option>
+                                <option value="create_subtask">Create subtask</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex space-x-4 pt-4">
+                            <button onclick="saveWorkflow(); this.closest('.fixed').remove();" class="flex-1 bg-green-600 hover:bg-green-700 py-2 rounded transition-colors">
+                                💾 Save Workflow
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-600 hover:bg-gray-700 py-2 rounded transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function saveWorkflow() {
+            const name = document.getElementById('workflowName').value;
+            const trigger = document.getElementById('workflowTrigger').value;
+            const action = document.getElementById('workflowAction').value;
+            
+            if (name && trigger && action) {
+                addActivity(`✨ New workflow created: ${name}`);
+                addChatMessage('Workflow Engine', `✅ Workflow "${name}" created successfully. Trigger: ${trigger}, Action: ${action}`);
+            }
+        }
+
+        function toggleWorkflow(id) {
+            addActivity(`⚙️ Workflow #${id} configuration updated`);
+        }
+
+        // Activity Feed Filtering
+        let activityFilter = 'all';
+
+        function filterActivities(filter) {
+            activityFilter = filter;
+            
+            // Update button states
+            document.querySelectorAll('[id^="filter"]').forEach(btn => {
+                btn.className = btn.className.replace('bg-blue-600/20 text-blue-400', 'bg-gray-600/20 text-gray-400');
+            });
+            
+            const activeBtn = document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`);
+            if (activeBtn) {
+                activeBtn.className = activeBtn.className.replace('bg-gray-600/20 text-gray-400', 'bg-blue-600/20 text-blue-400');
+            }
+            
+            renderActivities();
+        }
+
+        function clearActivities() {
+            activities.length = 0;
+            renderActivities();
+        }
+
+        // Initialize new features
+        function initAdvancedFeatures() {
+            renderCapacityChart();
+            updateDailyStats();
+            
+            // Simulate some initial activities
+            addActivity('🚀 Advanced features initialized');
+            addActivity('📊 Analytics dashboard loaded');
+            addActivity('⏱️ Time tracking system ready');
+            addActivity('🔔 Smart alerts configured');
+            addActivity('🤖 Automation workflows activated');
+        }
+
+        // Initialize the dashboard
+        init();
+        
+        // Initialize advanced features after a short delay
+        setTimeout(initAdvancedFeatures, 1000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98b69f3ad2f98993',t:'MTc1OTkzNjgyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

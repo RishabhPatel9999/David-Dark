@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAI Pro - Advanced Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            box-sizing: border-box;
+        }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .typing-animation { 
+            border-right: 2px solid #3b82f6; 
+            animation: blink 1s infinite; 
+        }
+        @keyframes blink { 0%, 50% { border-color: transparent; } 51%, 100% { border-color: #3b82f6; } }
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .slide-in { animation: slideIn 0.6s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        .modal-backdrop { backdrop-filter: blur(12px); }
+        .glassmorphism { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+        }
+        .neon-glow { 
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.4); 
+        }
+        .ai-thinking { 
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06d6a0, #3b82f6);
+            background-size: 300% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -300% 0; } 100% { background-position: 300% 0; } }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .slide-content { min-height: 400px; }
+        .progress-ring { transform: rotate(-90deg); }
+        .progress-ring-circle { 
+            stroke-dasharray: 251.2; 
+            stroke-dashoffset: 251.2; 
+            transition: stroke-dashoffset 0.5s ease-in-out; 
+        }
+        .holographic { 
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+            background-size: 400% 400%;
+            animation: hologram 4s ease infinite;
+        }
+        @keyframes hologram { 
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .neural-network { 
+            background-image: radial-gradient(circle at 25% 25%, #3b82f6 2px, transparent 2px),
+                              radial-gradient(circle at 75% 75%, #8b5cf6 2px, transparent 2px);
+            background-size: 50px 50px;
+            animation: neural-pulse 3s ease-in-out infinite;
+        }
+        @keyframes neural-pulse { 
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        .data-stream { 
+            background: linear-gradient(0deg, transparent 24%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.05) 75%, rgba(59, 130, 246, 0.05) 76%, transparent 77%);
+            animation: data-flow 2s linear infinite;
+        }
+        @keyframes data-flow { 0% { background-position: 0 0; } 100% { background-position: 0 50px; } }
+        .swiper-slide { border-radius: 16px; overflow: hidden; }
+        .ai-avatar { 
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            animation: ai-breathe 4s ease-in-out infinite;
+        }
+        @keyframes ai-breathe { 
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .real-time-indicator { 
+            animation: real-time-pulse 2s ease-in-out infinite;
+        }
+        @keyframes real-time-pulse { 
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Advanced Header with Real-time Data -->
+    <header class="gradient-bg text-white shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 neural-network opacity-20"></div>
+        <div class="absolute inset-0 data-stream opacity-10"></div>
+        <div class="container mx-auto px-6 py-4 relative z-10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 holographic rounded-2xl flex items-center justify-center floating">
+                        <span class="text-3xl">🧠</span>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold">EduAI Pro</h1>
+                        <p class="text-sm text-white/80">Advanced AI Learning Platform • <span id="live-users">12,847</span> learners online</p>
+                    </div>
+                </div>
+                
+                <!-- Real-time Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button onclick="showDashboard()" class="nav-item text-sm hover:text-blue-200 transition-colors flex items-center space-x-2">
+                        <span>📊</span><span>Dashboard</span>
+                    </button>
+                    <button onclick="showAITutor()" class="nav-item text-sm hover:text-blue-200 transition-colors flex items-center space-x-2">
+                        <span>🤖</span><span>AI Tutor</span>
+                    </button>
+                    <button onclick="showLectureHall()" class="nav-item text-sm hover:text-blue-200 transition-colors flex items-center space-x-2">
+                        <span>🎓</span><span>Lectures</span>
+                    </button>
+                    <button onclick="showVirtualLab()" class="nav-item text-sm hover:text-blue-200 transition-colors flex items-center space-x-2">
+                        <span>🧪</span><span>Virtual Lab</span>
+                    </button>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- AI Status with Real-time Metrics -->
+                    <div class="flex items-center space-x-3 glassmorphism rounded-full px-6 py-3">
+                        <div class="w-3 h-3 bg-green-400 rounded-full real-time-indicator"></div>
+                        <div class="text-sm">
+                            <div class="font-medium">AI Online</div>
+                            <div class="text-xs text-white/70">Response: <span id="ai-response-time">0.3s</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Notifications -->
+                    <button onclick="showNotifications()" class="relative p-3 glassmorphism rounded-full hover:bg-white/30 transition-colors">
+                        <span class="text-xl">🔔</span>
+                        <span class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full text-xs flex items-center justify-center animate-bounce" id="notification-count">7</span>
+                    </button>
+                    
+                    <!-- Advanced User Profile -->
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()" class="flex items-center space-x-3 glassmorphism rounded-full px-4 py-3 hover:bg-white/30 transition-colors">
+                            <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center">
+                                <span class="text-sm font-bold text-white" id="user-avatar">A</span>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-sm font-medium" id="user-name-header">Alex Chen</div>
+                                <div class="text-xs text-white/70">Level <span id="user-level">15</span> • <span id="user-xp">3,247</span> XP</div>
+                            </div>
+                            <span class="text-xs">▼</span>
+                        </button>
+                        
+                        <!-- Enhanced User Dropdown -->
+                        <div id="user-menu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl py-3 z-50 border border-gray-100">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 ai-avatar rounded-full flex items-center justify-center">
+                                        <span class="text-white font-bold">A</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Alex Chen</div>
+                                        <div class="text-sm text-gray-500">Premium Member</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" onclick="showProfile()" class="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-50 transition-colors">
+                                <span class="mr-3">👤</span>Profile & Settings
+                            </a>
+                            <a href="#" onclick="showAchievements()" class="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-50 transition-colors">
+                                <span class="mr-3">🏆</span>Achievements
+                            </a>
+                            <a href="#" onclick="showProgress()" class="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-50 transition-colors">
+                                <span class="mr-3">📈</span>Learning Analytics
+                            </a>
+                            <hr class="my-2">
+                            <a href="#" onclick="logout()" class="flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition-colors">
+                                <span class="mr-3">🚪</span>Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-6 py-8" id="main-content">
+        <!-- Advanced Welcome Section with Real-time Data -->
+        <div class="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-8 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 holographic rounded-full -mr-20 -mt-20 opacity-30"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-green-200/30 to-blue-200/30 rounded-full -ml-16 -mb-16"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-4xl font-bold text-gray-800 mb-3" id="welcome-message">Welcome back, Alex! 👋</h2>
+                        <p class="text-gray-600 mb-6 text-lg">Your AI-powered learning journey continues with <span class="font-semibold text-blue-600">advanced insights</span></p>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center space-x-3 bg-white/70 rounded-full px-6 py-3 glassmorphism">
+                                <span class="text-lg">🎯</span>
+                                <div>
+                                    <div class="text-sm text-gray-600">Today's Goal</div>
+                                    <div class="font-semibold text-gray-800" id="daily-goal">Complete 3 AI modules</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 bg-white/70 rounded-full px-6 py-3 glassmorphism">
+                                <span class="text-lg">⚡</span>
+                                <div>
+                                    <div class="text-sm text-gray-600">Total XP</div>
+                                    <div class="font-semibold text-gray-800" id="user-total-xp">3,247</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 bg-white/70 rounded-full px-6 py-3 glassmorphism">
+                                <span class="text-lg">🧠</span>
+                                <div>
+                                    <div class="text-sm text-gray-600">AI Accuracy</div>
+                                    <div class="font-semibold text-gray-800" id="ai-accuracy">97.3%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="relative">
+                            <svg class="w-24 h-24 progress-ring">
+                                <circle cx="48" cy="48" r="40" stroke="#e5e7eb" stroke-width="8" fill="transparent"/>
+                                <circle cx="48" cy="48" r="40" stroke="#3b82f6" stroke-width="8" fill="transparent" 
+                                        class="progress-ring-circle" style="stroke-dashoffset: 62.8;"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600" id="streak-counter">15</div>
+                                    <div class="text-xs text-gray-500">Day Streak</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-500">Level <span id="user-level-display">15</span> Expert</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant with Advanced Features -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border-l-4 border-blue-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/50 to-purple-100/50 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 ai-avatar rounded-2xl flex items-center justify-center">
+                            <span class="text-white text-2xl">🤖</span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">Advanced AI Learning Assistant</h3>
+                            <p class="text-gray-600">Powered by GPT-4 • Real-time knowledge • Personalized learning</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="showAITutor()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-all transform hover:scale-105">
+                            Start Chat
+                        </button>
+                        <button onclick="showAIInsights()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all transform hover:scale-105">
+                            AI Insights
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">🤖</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-700 italic mb-3">"Based on your recent performance in quantum physics, I've prepared a personalized study plan focusing on wave-particle duality. Your learning pattern suggests you excel with visual explanations."</p>
+                            <div class="flex space-x-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">Quantum Physics</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full">Visual Learning</span>
+                                <span class="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">Personalized</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Real-time Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow-xl p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-green-100 rounded-full -mr-12 -mt-12 opacity-50"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Courses Mastered</p>
+                            <p class="text-4xl font-bold text-green-600" id="courses-completed">18</p>
+                            <p class="text-sm text-green-500 flex items-center">
+                                <span class="mr-1">↗️</span>+3 this week
+                            </p>
+                        </div>
+                        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
+                            <span class="text-3xl">✅</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-green-500 h-3 rounded-full transition-all duration-1000" style="width: 85%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">85% completion rate</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-12 -mt-12 opacity-50"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">AI Accuracy Score</p>
+                            <p class="text-4xl font-bold text-blue-600" id="ai-accuracy-score">97.3%</p>
+                            <p class="text-sm text-blue-500 flex items-center">
+                                <span class="mr-1">🚀</span>+2.1% improvement
+                            </p>
+                        </div>
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                            <span class="text-3xl">🎯</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-blue-500 h-3 rounded-full transition-all duration-1000" style="width: 97%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Top 5% globally</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-purple-100 rounded-full -mr-12 -mt-12 opacity-50"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Study Time</p>
+                            <p class="text-4xl font-bold text-purple-600" id="study-time">127.5h</p>
+                            <p class="text-sm text-purple-500 flex items-center">
+                                <span class="mr-1">⏰</span>12.3h this week
+                            </p>
+                        </div>
+                        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center">
+                            <span class="text-3xl">📚</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 78%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">78% of monthly goal</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-6 card-hover relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-100 rounded-full -mr-12 -mt-12 opacity-50"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Neural Network Score</p>
+                            <p class="text-4xl font-bold text-yellow-600" id="neural-score">94.7</p>
+                            <p class="text-sm text-yellow-500 flex items-center">
+                                <span class="mr-1">🧠</span>Advanced level
+                            </p>
+                        </div>
+                        <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center">
+                            <span class="text-3xl">🏆</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-yellow-500 h-3 rounded-full transition-all duration-1000" style="width: 95%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Expert tier achieved</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Dashboard Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Main Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Interactive Lecture Slides -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <h3 class="text-2xl font-bold text-gray-800">Interactive Lecture Hall</h3>
+                            <span class="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full animate-pulse">🔴 LIVE</span>
+                        </div>
+                        <button onclick="showLectureHall()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-medium transition-all">
+                            Join Live Session
+                        </button>
+                    </div>
+                    
+                    <!-- Slide Carousel -->
+                    <div class="swiper lecture-swiper mb-6">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl p-8 text-white slide-content">
+                                    <h4 class="text-3xl font-bold mb-4">Quantum Computing Fundamentals</h4>
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="text-xl font-semibold mb-3">Key Concepts:</h5>
+                                            <ul class="space-y-2">
+                                                <li class="flex items-center"><span class="mr-2">⚛️</span>Quantum Superposition</li>
+                                                <li class="flex items-center"><span class="mr-2">🔗</span>Quantum Entanglement</li>
+                                                <li class="flex items-center"><span class="mr-2">📊</span>Quantum Algorithms</li>
+                                            </ul>
+                                        </div>
+                                        <div class="flex items-center justify-center">
+                                            <div class="w-32 h-32 border-4 border-white rounded-full flex items-center justify-center">
+                                                <span class="text-4xl">🌌</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="bg-gradient-to-br from-green-600 to-teal-700 rounded-2xl p-8 text-white slide-content">
+                                    <h4 class="text-3xl font-bold mb-4">Machine Learning Neural Networks</h4>
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="text-xl font-semibold mb-3">Architecture:</h5>
+                                            <ul class="space-y-2">
+                                                <li class="flex items-center"><span class="mr-2">🧠</span>Input Layer</li>
+                                                <li class="flex items-center"><span class="mr-2">🔄</span>Hidden Layers</li>
+                                                <li class="flex items-center"><span class="mr-2">📤</span>Output Layer</li>
+                                            </ul>
+                                        </div>
+                                        <div class="flex items-center justify-center">
+                                            <div class="neural-network w-32 h-32 rounded-2xl flex items-center justify-center">
+                                                <span class="text-4xl">🤖</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="bg-gradient-to-br from-purple-600 to-pink-700 rounded-2xl p-8 text-white slide-content">
+                                    <h4 class="text-3xl font-bold mb-4">Advanced Data Science</h4>
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="text-xl font-semibold mb-3">Techniques:</h5>
+                                            <ul class="space-y-2">
+                                                <li class="flex items-center"><span class="mr-2">📈</span>Predictive Analytics</li>
+                                                <li class="flex items-center"><span class="mr-2">🎯</span>Deep Learning</li>
+                                                <li class="flex items-center"><span class="mr-2">🔍</span>Pattern Recognition</li>
+                                            </ul>
+                                        </div>
+                                        <div class="flex items-center justify-center">
+                                            <div class="w-32 h-32 bg-white/20 rounded-2xl flex items-center justify-center">
+                                                <span class="text-4xl">📊</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm text-gray-600">👥 <span id="live-viewers">2,847</span> viewers</span>
+                            <span class="text-sm text-gray-600">💬 <span id="live-comments">156</span> comments</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm">📝 Take Notes</button>
+                            <button class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg text-sm">❓ Ask Question</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Video Learning Section -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">Featured Video Lectures</h3>
+                        <button onclick="showVideoLibrary()" class="text-blue-600 hover:text-blue-700 font-medium">View All Videos</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group cursor-pointer" onclick="playVideo('quantum-intro')">
+                            <div class="relative rounded-xl overflow-hidden mb-4">
+                                <div class="video-container bg-gradient-to-br from-blue-900 to-purple-900">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <span class="text-3xl">▶️</span>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 right-4">
+                                        <div class="bg-black/50 rounded-lg p-3">
+                                            <h4 class="text-white font-semibold">Introduction to Quantum Computing</h4>
+                                            <p class="text-white/80 text-sm">Dr. Sarah Chen • 45 min</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Advanced</span>
+                                    <span class="text-sm text-gray-600">👁️ 12.5K views</span>
+                                </div>
+                                <div class="text-sm text-gray-500">⭐ 4.9/5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="group cursor-pointer" onclick="playVideo('ml-neural')">
+                            <div class="relative rounded-xl overflow-hidden mb-4">
+                                <div class="video-container bg-gradient-to-br from-green-900 to-teal-900">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <span class="text-3xl">▶️</span>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 right-4">
+                                        <div class="bg-black/50 rounded-lg p-3">
+                                            <h4 class="text-white font-semibold">Neural Networks Deep Dive</h4>
+                                            <p class="text-white/80 text-sm">Prof. Alex Kumar • 38 min</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Intermediate</span>
+                                    <span class="text-sm text-gray-600">👁️ 8.7K views</span>
+                                </div>
+                                <div class="text-sm text-gray-500">⭐ 4.8/5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced AI-Powered Quiz System -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <h3 class="text-2xl font-bold text-gray-800">AI-Adaptive Quiz Engine</h3>
+                            <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full">GPT-4 Powered</span>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="generateAdvancedQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium">New AI Quiz</button>
+                            <button onclick="showQuizAnalytics()" class="text-gray-600 hover:text-gray-700 text-sm font-medium">Analytics</button>
+                        </div>
+                    </div>
+                    <div id="advanced-quiz-container">
+                        <div class="bg-gradient-to-r from-purple-50 via-blue-50 to-pink-50 rounded-xl p-8">
+                            <div class="text-center mb-6">
+                                <div class="w-20 h-20 ai-avatar rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-3xl text-white">🧠</span>
+                                </div>
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2">Advanced Quantum Physics Challenge</h4>
+                                <p class="text-gray-600">AI-generated questions based on your learning progress</p>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl p-6 mb-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">Question 1 of 5</span>
+                                    <span class="text-sm text-gray-500">⏱️ 2:30 remaining</span>
+                                </div>
+                                <h5 class="text-xl font-semibold text-gray-800 mb-6" id="advanced-quiz-question">
+                                    In quantum mechanics, what phenomenon allows particles to exist in multiple states simultaneously until observed?
+                                </h5>
+                                <div class="space-y-3" id="advanced-quiz-options">
+                                    <button class="quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all">
+                                        A) Quantum Entanglement
+                                    </button>
+                                    <button class="quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all">
+                                        B) Quantum Superposition
+                                    </button>
+                                    <button class="quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all">
+                                        C) Quantum Tunneling
+                                    </button>
+                                    <button class="quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all">
+                                        D) Wave-Particle Duality
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-sm text-gray-600">Score: <span class="font-semibold">0/0</span></div>
+                                    <div class="text-sm text-gray-600">Accuracy: <span class="font-semibold">--</span></div>
+                                </div>
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all">
+                                    Submit Answer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Learning Analytics -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">Real-time Learning Analytics</h3>
+                        <select class="border border-gray-300 rounded-lg px-4 py-2 text-sm">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 3 months</option>
+                        </select>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="advancedAnalyticsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Advanced Sidebar -->
+            <div class="space-y-6">
+                <!-- Advanced AI Study Assistant -->
+                <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl shadow-xl p-6 border border-blue-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">🤖 AI Study Companion</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-green-400 rounded-full real-time-indicator"></div>
+                            <span class="text-xs text-gray-500">Online</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-white/80 rounded-xl p-4 glassmorphism">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 ai-avatar rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm">🤖</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-700 mb-2">"I've analyzed your learning patterns. You show 94% retention with visual content and perform best during 2-4 PM sessions."</p>
+                                    <div class="flex space-x-1">
+                                        <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">Visual Learner</span>
+                                        <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Afternoon Peak</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="showAITutor()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-3 rounded-lg transition-all">
+                                💬 Chat
+                            </button>
+                            <button onclick="getPersonalizedPlan()" class="bg-purple-600 hover:bg-purple-700 text-white text-sm py-2 px-3 rounded-lg transition-all">
+                                📋 Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Global Activity Feed -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">🌍 Global Activity</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-gray-500">Live</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3" id="global-activity-feed">
+                        <!-- Live updates will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Advanced Smart Schedule -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">📅 AI-Optimized Schedule</h3>
+                        <button onclick="optimizeScheduleAI()" class="bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full hover:bg-green-200 transition-colors">
+                            🤖 Optimize
+                        </button>
+                    </div>
+                    <div class="space-y-3" id="ai-schedule-container">
+                        <!-- AI-optimized schedule will be populated -->
+                    </div>
+                </div>
+
+                <!-- Advanced Skill Mastery Radar -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Neural Skill Mapping</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Quantum Physics</span>
+                                <span class="text-sm font-bold text-blue-600">94%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style="width: 94%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Machine Learning</span>
+                                <span class="text-sm font-bold text-green-600">87%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-green-500 to-teal-500 h-3 rounded-full transition-all duration-1000" style="width: 87%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Data Science</span>
+                                <span class="text-sm font-bold text-purple-600">91%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-1000" style="width: 91%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Neural Networks</span>
+                                <span class="text-sm font-bold text-yellow-600">89%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-3 rounded-full transition-all duration-1000" style="width: 89%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Achievement Showcase -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">🏆 Recent Achievements</h3>
+                        <button onclick="showAllAchievements()" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</button>
+                    </div>
+                    <div class="space-y-3" id="achievements-showcase">
+                        <!-- Advanced achievements will be populated -->
+                    </div>
+                </div>
+
+                <!-- Advanced Study Groups -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">👥 Elite Study Groups</h3>
+                        <button onclick="showAdvancedStudyGroups()" class="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
+                            Join Elite
+                        </button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl hover:shadow-md transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white font-bold">Q</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-800">Quantum Computing Elite</p>
+                                <p class="text-xs text-gray-500">🔴 Live • 23 experts online</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 p-3 bg-gradient-to-r from-green-50 to-teal-50 rounded-xl hover:shadow-md transition-all cursor-pointer">
+                            <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center text-white font-bold">AI</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-800">AI Research Hub</p>
+                                <p class="text-xs text-gray-500">🧠 Advanced • 47 researchers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating AI Assistant Button -->
+        <div class="fixed bottom-8 right-8 z-50">
+            <button onclick="showAdvancedAIChat()" class="w-16 h-16 ai-avatar rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center neon-glow">
+                <span class="text-2xl text-white">🤖</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Advanced Modal Container -->
+    <div id="modal-container" class="hidden fixed inset-0 bg-black/60 modal-backdrop z-50 flex items-center justify-center p-4">
+        <!-- Modal content will be inserted here -->
+    </div>
+
+    <script>
+        // Advanced State Management
+        let currentUser = {
+            name: "Alex Chen",
+            email: "alex.chen@eduai.com",
+            level: 15,
+            xp: 3247,
+            streak: 15,
+            accuracy: 97.3,
+            coursesCompleted: 18,
+            studyTime: 127.5,
+            neuralScore: 94.7
+        };
+
+        let realTimeData = {
+            liveUsers: 12847,
+            aiResponseTime: 0.3,
+            liveViewers: 2847,
+            liveComments: 156,
+            globalActivity: []
+        };
+
+        // Advanced Course Data with Multimedia
+        const advancedCourses = [
+            {
+                id: 1,
+                title: "Quantum Computing Mastery",
+                instructor: "Dr. Sarah Chen",
+                progress: 94,
+                difficulty: "Expert",
+                duration: "12 weeks",
+                students: 1247,
+                rating: 4.9,
+                thumbnail: "quantum-thumb.jpg",
+                videoUrl: "quantum-intro-video",
+                slides: ["quantum-slide-1", "quantum-slide-2", "quantum-slide-3"],
+                skills: ["Quantum Algorithms", "Superposition", "Entanglement"],
+                aiRecommended: true,
+                liveSession: true
+            },
+            {
+                id: 2,
+                title: "Advanced Neural Networks",
+                instructor: "Prof. Alex Kumar",
+                progress: 87,
+                difficulty: "Advanced",
+                duration: "10 weeks",
+                students: 2156,
+                rating: 4.8,
+                thumbnail: "neural-thumb.jpg",
+                videoUrl: "neural-networks-deep",
+                slides: ["neural-slide-1", "neural-slide-2", "neural-slide-3"],
+                skills: ["Deep Learning", "Backpropagation", "CNN", "RNN"],
+                aiRecommended: true,
+                liveSession: false
+            },
+            {
+                id: 3,
+                title: "Data Science & AI Ethics",
+                instructor: "Dr. Maria Rodriguez",
+                progress: 91,
+                difficulty: "Intermediate",
+                duration: "8 weeks",
+                students: 3421,
+                rating: 4.7,
+                thumbnail: "ethics-thumb.jpg",
+                videoUrl: "ai-ethics-intro",
+                slides: ["ethics-slide-1", "ethics-slide-2"],
+                skills: ["Ethical AI", "Bias Detection", "Fairness"],
+                aiRecommended: false,
+                liveSession: true
+            }
+        ];
+
+        // Advanced Quiz System with AI Generation
+        const advancedQuizBank = {
+            quantum: [
+                {
+                    question: "In quantum mechanics, what phenomenon allows particles to exist in multiple states simultaneously until observed?",
+                    options: ["Quantum Entanglement", "Quantum Superposition", "Quantum Tunneling", "Wave-Particle Duality"],
+                    correct: 1,
+                    explanation: "Quantum superposition is the principle that quantum systems can exist in multiple states simultaneously until measured.",
+                    difficulty: "Advanced",
+                    aiGenerated: true
+                },
+                {
+                    question: "What is the minimum number of qubits needed to demonstrate quantum supremacy over classical computers?",
+                    options: ["50-60 qubits", "100-200 qubits", "500+ qubits", "1000+ qubits"],
+                    correct: 0,
+                    explanation: "Current research suggests 50-60 high-quality qubits can achieve quantum supremacy for specific problems.",
+                    difficulty: "Expert",
+                    aiGenerated: true
+                }
+            ],
+            ml: [
+                {
+                    question: "In a neural network, what technique helps prevent overfitting by randomly setting some neurons to zero during training?",
+                    options: ["Batch Normalization", "Dropout", "Regularization", "Early Stopping"],
+                    correct: 1,
+                    explanation: "Dropout randomly sets a fraction of input units to 0 at each update during training, which helps prevent overfitting.",
+                    difficulty: "Intermediate",
+                    aiGenerated: true
+                }
+            ]
+        };
+
+        // Initialize Advanced Dashboard
+        function initAdvancedDashboard() {
+            updateRealTimeData();
+            initLectureSlider();
+            renderGlobalActivity();
+            renderAISchedule();
+            renderAdvancedAchievements();
+            startRealTimeUpdates();
+            initAdvancedCharts();
+            updateUserStats();
+        }
+
+        // Real-time Data Updates
+        function updateRealTimeData() {
+            // Simulate real-time data changes
+            realTimeData.liveUsers += Math.floor(Math.random() * 10) - 5;
+            realTimeData.aiResponseTime = (Math.random() * 0.5 + 0.2).toFixed(1);
+            realTimeData.liveViewers += Math.floor(Math.random() * 20) - 10;
+            realTimeData.liveComments += Math.floor(Math.random() * 5);
+
+            // Update UI elements
+            document.getElementById('live-users').textContent = realTimeData.liveUsers.toLocaleString();
+            document.getElementById('ai-response-time').textContent = realTimeData.aiResponseTime + 's';
+            document.getElementById('live-viewers').textContent = realTimeData.liveViewers.toLocaleString();
+            document.getElementById('live-comments').textContent = realTimeData.liveComments;
+        }
+
+        function startRealTimeUpdates() {
+            setInterval(updateRealTimeData, 3000);
+            setInterval(updateGlobalActivity, 5000);
+            setInterval(updateAIMetrics, 10000);
+        }
+
+        function updateGlobalActivity() {
+            const activities = [
+                "🇺🇸 Sarah completed Quantum Algorithms module",
+                "🇯🇵 Hiroshi achieved 98% in Neural Networks quiz",
+                "🇬🇧 Emma joined Advanced AI Ethics discussion",
+                "🇩🇪 Klaus unlocked Quantum Supremacy badge",
+                "🇫🇷 Marie started Deep Learning specialization",
+                "🇨🇦 Alex finished Data Science capstone project",
+                "🇦🇺 Olivia earned Machine Learning Expert status",
+                "🇮🇳 Raj contributed to open-source AI project"
+            ];
+
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            const container = document.getElementById('global-activity-feed');
+            
+            const newActivity = document.createElement('div');
+            newActivity.className = 'flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg slide-in';
+            newActivity.innerHTML = `
+                <div class="w-2 h-2 bg-green-400 rounded-full mt-2 real-time-indicator"></div>
+                <div class="flex-1">
+                    <p class="text-sm text-gray-800">${randomActivity}</p>
+                    <p class="text-xs text-gray-500">Just now</p>
+                </div>
+            `;
+            
+            container.insertBefore(newActivity, container.firstChild);
+            
+            // Keep only latest 5 activities
+            if (container.children.length > 5) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function updateAIMetrics() {
+            // Simulate AI performance improvements
+            currentUser.accuracy = Math.min(99.9, currentUser.accuracy + (Math.random() * 0.2 - 0.1));
+            currentUser.neuralScore = Math.min(99.9, currentUser.neuralScore + (Math.random() * 0.3 - 0.1));
+            
+            document.getElementById('ai-accuracy').textContent = currentUser.accuracy.toFixed(1) + '%';
+            document.getElementById('ai-accuracy-score').textContent = currentUser.accuracy.toFixed(1) + '%';
+            document.getElementById('neural-score').textContent = currentUser.neuralScore.toFixed(1);
+        }
+
+        // Initialize Lecture Slider
+        function initLectureSlider() {
+            const swiper = new Swiper('.lecture-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        }
+
+        // Advanced AI Chat System
+        function showAdvancedAIChat() {
+            showModal(`
+                <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 ai-avatar rounded-2xl flex items-center justify-center">
+                                <span class="text-white text-2xl">🤖</span>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-gray-800">Advanced AI Tutor</h2>
+                                <p class="text-gray-600">GPT-4 Powered • Real-time Learning • Personalized Responses</p>
+                            </div>
+                        </div>
+                        <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-50 rounded-2xl p-6 h-96 overflow-y-auto mb-6" id="advanced-chat-messages">
+                                <div class="space-y-4">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center">
+                                            <span class="text-white text-sm">🤖</span>
+                                        </div>
+                                        <div class="bg-white rounded-2xl p-4 max-w-md shadow-sm">
+                                            <p class="text-sm">Hello Alex! I'm your advanced AI tutor. I've analyzed your learning patterns and I'm ready to help you master quantum computing and machine learning. What would you like to explore today?</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-3">
+                                <input type="text" id="advanced-chat-input" placeholder="Ask me anything about quantum computing, ML, or AI..." class="flex-1 border border-gray-300 rounded-xl px-6 py-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <button onclick="sendAdvancedMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all">
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4">
+                                <h4 class="font-semibold text-gray-800 mb-3">Quick Topics</h4>
+                                <div class="space-y-2">
+                                    <button onclick="askAdvancedAI('Explain quantum entanglement with real examples')" class="w-full text-left text-sm bg-white/60 hover:bg-white/80 px-3 py-2 rounded-lg transition-colors">
+                                        🔗 Quantum Entanglement
+                                    </button>
+                                    <button onclick="askAdvancedAI('How do transformer models work in detail?')" class="w-full text-left text-sm bg-white/60 hover:bg-white/80 px-3 py-2 rounded-lg transition-colors">
+                                        🤖 Transformer Models
+                                    </button>
+                                    <button onclick="askAdvancedAI('Create a study plan for quantum machine learning')" class="w-full text-left text-sm bg-white/60 hover:bg-white/80 px-3 py-2 rounded-lg transition-colors">
+                                        📚 Study Plan
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl p-4">
+                                <h4 class="font-semibold text-gray-800 mb-3">AI Insights</h4>
+                                <div class="text-sm text-gray-700 space-y-2">
+                                    <p>📊 Your quantum physics mastery: 94%</p>
+                                    <p>🧠 Optimal learning time: 2-4 PM</p>
+                                    <p>🎯 Next milestone: Expert level</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function sendAdvancedMessage() {
+            const input = document.getElementById('advanced-chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addAdvancedChatMessage(message, 'user');
+            input.value = '';
+            
+            // Show AI thinking animation
+            showAIThinking();
+            
+            // Simulate advanced AI response
+            setTimeout(() => {
+                hideAIThinking();
+                const responses = [
+                    "Excellent question! Let me break down quantum entanglement for you. When two particles become entangled, measuring one instantly affects the other, regardless of distance. This 'spooky action at a distance' as Einstein called it, is fundamental to quantum computing...",
+                    "Great topic! Transformer models revolutionized AI through self-attention mechanisms. The key innovation is allowing the model to weigh the importance of different parts of the input simultaneously, rather than processing sequentially...",
+                    "Based on your current progress and learning style, I recommend starting with quantum gates and circuits, then moving to quantum algorithms like Shor's and Grover's. Your visual learning preference suggests using quantum circuit simulators...",
+                    "That's a fascinating area where quantum computing meets machine learning! Quantum machine learning leverages quantum properties like superposition and entanglement to potentially achieve exponential speedups in certain algorithms..."
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                addAdvancedChatMessage(response, 'ai');
+            }, 2000);
+        }
+
+        function askAdvancedAI(question) {
+            document.getElementById('advanced-chat-input').value = question;
+            sendAdvancedMessage();
+        }
+
+        function addAdvancedChatMessage(message, sender) {
+            const container = document.getElementById('advanced-chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-start space-x-3 slide-in';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm">👤</span>
+                    </div>
+                    <div class="bg-blue-100 rounded-2xl p-4 max-w-md">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm">🤖</span>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 max-w-md shadow-sm">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            }
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showAIThinking() {
+            const container = document.getElementById('advanced-chat-messages');
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.id = 'ai-thinking-indicator';
+            thinkingDiv.className = 'flex items-start space-x-3';
+            thinkingDiv.innerHTML = `
+                <div class="w-10 h-10 ai-avatar rounded-full flex items-center justify-center">
+                    <span class="text-white text-sm">🤖</span>
+                </div>
+                <div class="bg-white rounded-2xl p-4 shadow-sm">
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(thinkingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideAIThinking() {
+            const thinkingIndicator = document.getElementById('ai-thinking-indicator');
+            if (thinkingIndicator) {
+                thinkingIndicator.remove();
+            }
+        }
+
+        // Advanced Video Player
+        function playVideo(videoId) {
+            showModal(`
+                <div class="bg-black rounded-3xl p-8 max-w-6xl w-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">Advanced Video Lecture</h2>
+                        <button onclick="hideModal()" class="text-white hover:text-gray-300 text-3xl">&times;</button>
+                    </div>
+                    
+                    <div class="video-container bg-gray-900 rounded-2xl mb-6">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-4xl">▶️</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2">
+                                    ${videoId === 'quantum-intro' ? 'Introduction to Quantum Computing' : 'Neural Networks Deep Dive'}
+                                </h3>
+                                <p class="text-gray-300">
+                                    ${videoId === 'quantum-intro' ? 'Dr. Sarah Chen • 45 minutes' : 'Prof. Alex Kumar • 38 minutes'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <div class="bg-gray-800 rounded-2xl p-6">
+                                <h4 class="text-white font-semibold mb-4">Video Controls</h4>
+                                <div class="flex items-center space-x-4">
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">⏯️ Play/Pause</button>
+                                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">⏪ -10s</button>
+                                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">⏩ +10s</button>
+                                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">📝 Notes</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="bg-gray-800 rounded-2xl p-6">
+                                <h4 class="text-white font-semibold mb-4">Chapter Outline</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="text-blue-400 cursor-pointer hover:text-blue-300">00:00 Introduction</div>
+                                    <div class="text-gray-300 cursor-pointer hover:text-white">05:30 Core Concepts</div>
+                                    <div class="text-gray-300 cursor-pointer hover:text-white">15:45 Practical Examples</div>
+                                    <div class="text-gray-300 cursor-pointer hover:text-white">30:20 Advanced Topics</div>
+                                    <div class="text-gray-300 cursor-pointer hover:text-white">40:15 Summary</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Advanced Charts
+        function initAdvancedCharts() {
+            const ctx = document.getElementById('advancedAnalyticsChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [
+                        {
+                            label: 'Learning Progress',
+                            data: [85, 87, 90, 88, 92, 94, 97],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'AI Accuracy',
+                            data: [92, 93, 94, 95, 96, 97, 97.3],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Neural Score',
+                            data: [88, 89, 91, 92, 93, 94, 94.7],
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 80,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Utility Functions
+        function showModal(content) {
+            const modal = document.getElementById('modal-container');
+            modal.innerHTML = content;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('modal-container');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleUserMenu() {
+            const menu = document.getElementById('user-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function renderGlobalActivity() {
+            const activities = [
+                "🇺🇸 Sarah completed Quantum Algorithms module",
+                "🇯🇵 Hiroshi achieved 98% in Neural Networks quiz",
+                "🇬🇧 Emma joined Advanced AI Ethics discussion",
+                "🇩🇪 Klaus unlocked Quantum Supremacy badge"
+            ];
+
+            const container = document.getElementById('global-activity-feed');
+            container.innerHTML = activities.map(activity => `
+                <div class="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <div class="w-2 h-2 bg-green-400 rounded-full mt-2 real-time-indicator"></div>
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-800">${activity}</p>
+                        <p class="text-xs text-gray-500">2 min ago</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAISchedule() {
+            const schedule = [
+                { time: "10:00 AM", subject: "Quantum Computing", type: "Live Lecture", priority: "high" },
+                { time: "2:00 PM", subject: "Neural Networks", type: "AI Lab Session", priority: "medium" },
+                { time: "4:00 PM", subject: "Data Science", type: "Study Group", priority: "low" },
+                { time: "6:00 PM", subject: "ML Ethics", type: "Discussion", priority: "medium" }
+            ];
+
+            const container = document.getElementById('ai-schedule-container');
+            container.innerHTML = schedule.map(item => {
+                const priorityColors = {
+                    high: 'border-red-400 bg-red-50',
+                    medium: 'border-blue-400 bg-blue-50',
+                    low: 'border-green-400 bg-green-50'
+                };
+                return `
+                    <div class="flex items-center justify-between p-3 border-l-4 ${priorityColors[item.priority]} rounded-r-xl">
+                        <div>
+                            <p class="font-medium text-gray-800">${item.subject}</p>
+                            <p class="text-sm text-gray-600">${item.type}</p>
+                        </div>
+                        <span class="text-sm font-medium text-gray-700">${item.time}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAdvancedAchievements() {
+            const achievements = [
+                { title: "Quantum Master", description: "Mastered quantum computing fundamentals", icon: "⚛️", rarity: "legendary" },
+                { title: "AI Researcher", description: "Published 5 research insights", icon: "🧠", rarity: "epic" },
+                { title: "Neural Network Expert", description: "Built 10 advanced models", icon: "🤖", rarity: "rare" }
+            ];
+
+            const container = document.getElementById('achievements-showcase');
+            container.innerHTML = achievements.map(achievement => {
+                const rarityColors = {
+                    legendary: 'from-yellow-50 to-orange-50 border-yellow-200',
+                    epic: 'from-purple-50 to-pink-50 border-purple-200',
+                    rare: 'from-blue-50 to-indigo-50 border-blue-200'
+                };
+                return `
+                    <div class="flex items-center space-x-3 p-3 bg-gradient-to-r ${rarityColors[achievement.rarity]} rounded-xl border">
+                        <span class="text-2xl">${achievement.icon}</span>
+                        <div>
+                            <p class="font-medium text-gray-800">${achievement.title}</p>
+                            <p class="text-sm text-gray-600">${achievement.description}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateUserStats() {
+            document.getElementById('user-name-header').textContent = currentUser.name;
+            document.getElementById('user-level').textContent = currentUser.level;
+            document.getElementById('user-level-display').textContent = currentUser.level;
+            document.getElementById('user-xp').textContent = currentUser.xp.toLocaleString();
+            document.getElementById('user-total-xp').textContent = currentUser.xp.toLocaleString();
+            document.getElementById('streak-counter').textContent = currentUser.streak;
+            document.getElementById('ai-accuracy').textContent = currentUser.accuracy.toFixed(1) + '%';
+            document.getElementById('courses-completed').textContent = currentUser.coursesCompleted;
+            document.getElementById('study-time').textContent = currentUser.studyTime + 'h';
+            document.getElementById('neural-score').textContent = currentUser.neuralScore.toFixed(1);
+        }
+
+        // Navigation Functions
+        function showDashboard() {
+            // Already on dashboard
+        }
+
+        function showAITutor() {
+            showAdvancedAIChat();
+        }
+
+        function showLectureHall() {
+            showModal(`
+                <div class="bg-white rounded-3xl p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800">🎓 Interactive Lecture Hall</h2>
+                        <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <div class="bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl p-8 text-white mb-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-2xl font-bold">Quantum Computing Fundamentals</h3>
+                                    <span class="bg-red-500 text-white text-sm px-3 py-1 rounded-full animate-pulse">🔴 LIVE</span>
+                                </div>
+                                <p class="text-white/80 mb-6">Dr. Sarah Chen • Advanced Level • 2,847 viewers</p>
+                                <div class="aspect-video bg-black/20 rounded-xl flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <span class="text-3xl">📡</span>
+                                        </div>
+                                        <p class="text-xl font-semibold">Live Lecture in Progress</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl font-medium">
+                                    🎤 Ask Question
+                                </button>
+                                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-medium">
+                                    📝 Take Notes
+                                </button>
+                                <button class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-xl font-medium">
+                                    💬 Chat
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-gray-50 rounded-2xl p-6">
+                                <h4 class="font-bold text-gray-800 mb-4">Live Chat</h4>
+                                <div class="space-y-3 h-64 overflow-y-auto">
+                                    <div class="text-sm"><strong>Alex:</strong> Great explanation of superposition!</div>
+                                    <div class="text-sm"><strong>Sarah:</strong> Can you explain entanglement next?</div>
+                                    <div class="text-sm"><strong>Mike:</strong> This is fascinating! 🤯</div>
+                                </div>
+                                <input type="text" placeholder="Type your message..." class="w-full mt-4 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-2xl p-6">
+                                <h4 class="font-bold text-gray-800 mb-4">Upcoming Sessions</h4>
+                                <div class="space-y-3">
+                                    <div class="text-sm">
+                                        <div class="font-medium">Neural Networks Deep Dive</div>
+                                        <div class="text-gray-600">Tomorrow 2:00 PM</div>
+                                    </div>
+                                    <div class="text-sm">
+                                        <div class="font-medium">AI Ethics Discussion</div>
+                                        <div class="text-gray-600">Friday 4:00 PM</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showVirtualLab() {
+            showModal(`
+                <div class="bg-white rounded-3xl p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800">🧪 Virtual AI Laboratory</h2>
+                        <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Quantum Circuit Simulator</h3>
+                            <div class="bg-gray-900 rounded-2xl p-6 h-80">
+                                <div class="text-green-400 font-mono text-sm">
+                                    <div>Quantum Circuit Designer v2.0</div>
+                                    <div>================================</div>
+                                    <div class="mt-4">
+                                        <div>|0⟩ ──[H]──●──[M]──</div>
+                                        <div>           │</div>
+                                        <div>|0⟩ ──────[X]──[M]──</div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div>Results: |00⟩: 50% |11⟩: 50%</div>
+                                        <div>Entanglement detected! ✓</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Run Circuit</button>
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">Add Gate</button>
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm">Measure</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Neural Network Playground</h3>
+                            <div class="bg-gray-900 rounded-2xl p-6 h-80">
+                                <div class="text-blue-400 font-mono text-sm">
+                                    <div>Neural Network Trainer v3.0</div>
+                                    <div>==============================</div>
+                                    <div class="mt-4">
+                                        <div>Architecture: [784, 128, 64, 10]</div>
+                                        <div>Activation: ReLU</div>
+                                        <div>Optimizer: Adam</div>
+                                        <div>Learning Rate: 0.001</div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <div>Epoch 50/100</div>
+                                        <div>Loss: 0.0234 ↓</div>
+                                        <div>Accuracy: 97.8% ↑</div>
+                                        <div>Training... ████████░░ 80%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Train Model</button>
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">Test</button>
+                                <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm">Visualize</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('user-menu');
+            const userButton = event.target.closest('button[onclick="toggleUserMenu()"]');
+            
+            if (!userButton && userMenu && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        // Initialize the advanced dashboard
+        initAdvancedDashboard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c00da9d238a5d3',t:'MTc2MDAzNTcyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

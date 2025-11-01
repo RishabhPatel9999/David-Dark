@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Learning Hub - Multi-Level Quiz System 🎓</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            overflow-x: hidden;
+            position: relative;
+            transition: all 0.8s ease;
+        }
+
+        /* Class-specific themes */
+        .class-1-3 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .class-4-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .class-7-9 { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
+        .class-10-12 { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+
+        /* Animated background elements */
+        .floating-element {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.6;
+            animation: floatAnimation 8s infinite linear;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes floatAnimation {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            background-image: url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&h=400&fit=crop&crop=center');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            z-index: 1;
+        }
+
+        .header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(118, 75, 162, 0.6)); }
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb-arrow {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .class-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .class-group {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .class-group-1-3 {
+            background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop&crop=center');
+        }
+
+        .class-group-4-6 {
+            background-image: url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&h=300&fit=crop&crop=center');
+        }
+
+        .class-group-7-9 {
+            background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=300&fit=crop&crop=center');
+        }
+
+        .class-group-10-12 {
+            background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop&crop=center');
+        }
+
+        .class-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .class-group:hover::before {
+            left: 100%;
+        }
+
+        .class-group:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .class-group.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: scale(1.02);
+        }
+
+        .class-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .class-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .class-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Level Selector Styles */
+        .level-selector {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-selector.active {
+            display: grid;
+            animation: slideDown 0.5s ease;
+        }
+
+        .level-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .level-card.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+
+        .level-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .level-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .level-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .level-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .subject-selector {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .subject-selector.active {
+            display: grid;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-btn {
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: #1f2937;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .subject-mathematics {
+            background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-english {
+            background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-science {
+            background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-physics {
+            background-image: url('https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-chemistry {
+            background-image: url('https://images.unsplash.com/photo-1554475901-4538ddfbccc2?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-biology {
+            background-image: url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-history {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-geography {
+            background-image: url('https://images.unsplash.com/photo-1519302959554-a75be0afc82a?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-computer {
+            background-image: url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-economics {
+            background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-socialstudies {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-socialscience {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-artcraft {
+            background-image: url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-moralscience {
+            background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-generalknowledge {
+            background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-sanskrithindi {
+            background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-politicalscience {
+            background-image: url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=300&h=200&fit=crop&crop=center');
+        }
+
+        .subject-btn:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .subject-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Difficulty Selector Styles */
+        .difficulty-selector {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .difficulty-selector.active {
+            display: grid;
+            animation: slideDown 0.5s ease;
+        }
+
+        .difficulty-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .difficulty-easy {
+            border-color: #10b981;
+        }
+
+        .difficulty-easy:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            border-color: #059669;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .difficulty-medium {
+            border-color: #f59e0b;
+        }
+
+        .difficulty-medium:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+            border-color: #d97706;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .difficulty-hard {
+            border-color: #ef4444;
+        }
+
+        .difficulty-hard:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            border-color: #dc2626;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3);
+        }
+
+        .difficulty-card.active.difficulty-easy {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            border-color: #059669;
+        }
+
+        .difficulty-card.active.difficulty-medium {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            border-color: #d97706;
+        }
+
+        .difficulty-card.active.difficulty-hard {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+            border-color: #dc2626;
+        }
+
+        .difficulty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .difficulty-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .difficulty-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .difficulty-features {
+            list-style: none;
+            text-align: left;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .difficulty-features li {
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .difficulty-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-icon {
+            font-size: 3rem;
+            transition: all 0.5s ease;
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .progress-bar {
+            flex: 1;
+            max-width: 400px;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.8s ease;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .score-display {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #374151;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            display: none;
+            transition: all 0.5s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .quiz-card-mathematics {
+            background-image: url('https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-science {
+            background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-english {
+            background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-physics {
+            background-image: url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-chemistry {
+            background-image: url('https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-biology {
+            background-image: url('https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-history {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-geography {
+            background-image: url('https://images.unsplash.com/photo-1519302959554-a75be0afc82a?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-socialstudies {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-socialscience {
+            background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-computerscience {
+            background-image: url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card-economics {
+            background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=600&fit=crop&crop=center');
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: cardRotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes cardRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .quiz-card.active {
+            display: block;
+            animation: cardSlideIn 0.6s ease;
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #374151;
+            font-weight: 600;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 20px 25px;
+            border: 3px solid #e5e7eb;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.3s;
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: scale(1.02);
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            animation: correctPulse 0.8s ease;
+        }
+
+        .option.incorrect {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            animation: incorrectShake 0.8s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(107, 114, 128, 0.4);
+        }
+
+        .completion-celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .celebration-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 600px;
+            animation: celebrationPop 1s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes celebrationPop {
+            0% {
+                transform: scale(0.3) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .badge {
+            font-size: 5rem;
+            margin: 25px 0;
+            animation: badgeGlow 2s infinite alternate;
+        }
+
+        @keyframes badgeGlow {
+            0% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            }
+            100% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.8));
+            }
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            overflow: hidden;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .chatbot-container.open {
+            display: flex;
+            animation: chatbotSlideIn 0.5s ease;
+        }
+
+        @keyframes chatbotSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-title {
+            font-weight: bold;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chatbot-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            animation: messageSlide 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            align-self: flex-start;
+            border-bottom-left-radius: 8px;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 8px;
+        }
+
+        .chatbot-input-container {
+            padding: 20px;
+            border-top: 2px solid #e5e7eb;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            animation: chatbotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes chatbotPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-toggle.hidden {
+            display: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 20px;
+            border-bottom-left-radius: 8px;
+            align-self: flex-start;
+            max-width: 85%;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: #0ea5e9;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 2.2rem; }
+            .quiz-card { padding: 25px; }
+            .class-selector { grid-template-columns: 1fr; }
+            .subject-selector { grid-template-columns: repeat(2, 1fr); }
+            .level-selector { grid-template-columns: 1fr; }
+            .difficulty-selector { grid-template-columns: 1fr; }
+            
+            .chatbot-container {
+                width: 95%;
+                height: 80%;
+                bottom: 10px;
+                right: 2.5%;
+                left: 2.5%;
+            }
+            
+            .chatbot-toggle {
+                bottom: 15px;
+                right: 15px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Smart Learning Hub 📚</h1>
+            <p>Multi-Level Quiz Platform | Classes 1-12 | All Subjects | Easy • Medium • Hard</p>
+            
+            <div class="breadcrumb" id="breadcrumb">
+                <div class="breadcrumb-item">
+                    <span>🏠 Select Class Group</span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-icon" id="progressIcon">🌟</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="score-display" id="scoreDisplay">Select Class & Level</div>
+            </div>
+        </div>
+
+        <div class="class-selector" id="classSelector">
+            <div class="class-group class-group-1-3" onclick="selectClassGroup('1-3')">
+                <div class="class-icon">🎨</div>
+                <div class="class-title">Classes 1-3</div>
+                <div class="class-description">Foundation Learning<br>Basic concepts with fun activities</div>
+            </div>
+            <div class="class-group class-group-4-6" onclick="selectClassGroup('4-6')">
+                <div class="class-icon">🔍</div>
+                <div class="class-title">Classes 4-6</div>
+                <div class="class-description">Elementary Education<br>Building core knowledge</div>
+            </div>
+            <div class="class-group class-group-7-9" onclick="selectClassGroup('7-9')">
+                <div class="class-icon">⚗️</div>
+                <div class="class-title">Classes 7-9</div>
+                <div class="class-description">Middle School<br>Advanced concepts & experiments</div>
+            </div>
+            <div class="class-group class-group-10-12" onclick="selectClassGroup('10-12')">
+                <div class="class-icon">🎯</div>
+                <div class="class-title">Classes 10-12</div>
+                <div class="class-description">Senior Secondary<br>Competitive exam preparation</div>
+            </div>
+        </div>
+
+        <div class="level-selector" id="levelSelector">
+            <!-- Levels will be populated dynamically -->
+        </div>
+
+        <div class="subject-selector" id="subjectSelector">
+            <!-- Subjects will be populated dynamically -->
+        </div>
+
+        <div class="difficulty-selector" id="difficultySelector">
+            <div class="difficulty-card difficulty-easy" onclick="selectDifficulty('easy')">
+                <div class="difficulty-icon">🟢</div>
+                <div class="difficulty-title">Easy</div>
+                <div class="difficulty-description">Perfect for beginners and building confidence</div>
+                <ul class="difficulty-features">
+                    <li>Simple questions</li>
+                    <li>Clear explanations</li>
+                    <li>Confidence building</li>
+                    <li>Foundation concepts</li>
+                </ul>
+            </div>
+            <div class="difficulty-card difficulty-medium" onclick="selectDifficulty('medium')">
+                <div class="difficulty-icon">🟡</div>
+                <div class="difficulty-title">Medium</div>
+                <div class="difficulty-description">Balanced challenge for steady progress</div>
+                <ul class="difficulty-features">
+                    <li>Moderate complexity</li>
+                    <li>Application based</li>
+                    <li>Skill development</li>
+                    <li>Problem solving</li>
+                </ul>
+            </div>
+            <div class="difficulty-card difficulty-hard" onclick="selectDifficulty('hard')">
+                <div class="difficulty-icon">🔴</div>
+                <div class="difficulty-title">Hard</div>
+                <div class="difficulty-description">Advanced challenges for mastery</div>
+                <ul class="difficulty-features">
+                    <li>Complex problems</li>
+                    <li>Critical thinking</li>
+                    <li>Advanced concepts</li>
+                    <li>Exam preparation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" id="backBtn" onclick="goBack()">← Back</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="completion-celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>🎉 Outstanding Performance! 🎉</h2>
+            <div class="badge" id="celebrationBadge">🏆</div>
+            <h3 id="celebrationTitle">Quiz Master!</h3>
+            <p>You've successfully completed the quiz!</p>
+            <div id="finalScore"></div>
+            <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 20px;">🔄 Take Another Quiz</button>
+        </div>
+    </div>
+
+    <!-- AI Chatbot -->
+    <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">🤖</button>
+    
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <div class="chatbot-title">🤖 Smart Learning AI</div>
+            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                Hello! I'm your Smart Learning AI assistant! 🎓 I can help you with any subject from Classes 1-12 across all difficulty levels. Ask me about Math, Science, English, History, Geography, and more! What would you like to learn today?
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+        
+        <div class="chatbot-input-container">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Ask me anything about your studies..." onkeypress="handleChatKeyPress(event)">
+            <button class="chatbot-send" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced data structure with levels and difficulties
+        const levelsByClass = {
+            '1-3': [
+                { id: 'class1', name: 'Class 1', icon: '🌱', description: 'First steps in learning', stats: '5-10 questions' },
+                { id: 'class2', name: 'Class 2', icon: '🌿', description: 'Building basic skills', stats: '8-12 questions' },
+                { id: 'class3', name: 'Class 3', icon: '🌳', description: 'Growing knowledge', stats: '10-15 questions' }
+            ],
+            '4-6': [
+                { id: 'class4', name: 'Class 4', icon: '📖', description: 'Elementary concepts', stats: '10-15 questions' },
+                { id: 'class5', name: 'Class 5', icon: '🔬', description: 'Exploring subjects', stats: '12-18 questions' },
+                { id: 'class6', name: 'Class 6', icon: '🎯', description: 'Preparing for middle school', stats: '15-20 questions' }
+            ],
+            '7-9': [
+                { id: 'class7', name: 'Class 7', icon: '⚗️', description: 'Middle school foundation', stats: '15-20 questions' },
+                { id: 'class8', name: 'Class 8', icon: '🧪', description: 'Advanced concepts', stats: '18-25 questions' },
+                { id: 'class9', name: 'Class 9', icon: '🏆', description: 'High school preparation', stats: '20-30 questions' }
+            ],
+            '10-12': [
+                { id: 'class10', name: 'Class 10', icon: '🎓', description: 'Board exam foundation', stats: '20-30 questions' },
+                { id: 'class11', name: 'Class 11', icon: '🚀', description: 'Specialized subjects', stats: '25-35 questions' },
+                { id: 'class12', name: 'Class 12', icon: '👑', description: 'College preparation', stats: '30-40 questions' }
+            ]
+        };
+
+        const subjectsByClass = {
+            '1-3': ['Mathematics', 'English', 'Science', 'Social Studies', 'Art & Craft', 'Moral Science'],
+            '4-6': ['Mathematics', 'English', 'Science', 'Social Studies', 'Computer Science', 'General Knowledge'],
+            '7-9': ['Mathematics', 'English', 'Science', 'Social Science', 'Computer Science', 'Sanskrit/Hindi'],
+            '10-12': ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Computer Science', 'Economics', 'History', 'Geography', 'Political Science']
+        };
+
+        // Enhanced questions with difficulty levels
+        const questions = {
+            'class1': {
+                'Mathematics': {
+                    'easy': [
+                        {
+                            question: "🔢 What comes after the number 2?",
+                            options: ["1", "3", "4", "5"],
+                            correct: 1
+                        },
+                        {
+                            question: "➕ What is 1 + 1?",
+                            options: ["1", "2", "3", "4"],
+                            correct: 1
+                        },
+                        {
+                            question: "🍎 If you have 2 apples and get 1 more, how many do you have?",
+                            options: ["2", "3", "4", "1"],
+                            correct: 1
+                        }
+                    ],
+                    'medium': [
+                        {
+                            question: "🔢 What is 5 + 3?",
+                            options: ["7", "8", "9", "6"],
+                            correct: 1
+                        },
+                        {
+                            question: "➖ What is 10 - 4?",
+                            options: ["5", "6", "7", "8"],
+                            correct: 1
+                        },
+                        {
+                            question: "🔺 How many sides does a triangle have?",
+                            options: ["2", "3", "4", "5"],
+                            correct: 1
+                        }
+                    ],
+                    'hard': [
+                        {
+                            question: "🔢 What is 12 + 8?",
+                            options: ["18", "19", "20", "21"],
+                            correct: 2
+                        },
+                        {
+                            question: "➖ What is 15 - 7?",
+                            options: ["7", "8", "9", "6"],
+                            correct: 1
+                        },
+                        {
+                            question: "🔄 What is 3 × 4?",
+                            options: ["10", "11", "12", "13"],
+                            correct: 2
+                        }
+                    ]
+                },
+                'English': {
+                    'easy': [
+                        {
+                            question: "🔤 What is the first letter of the alphabet?",
+                            options: ["B", "A", "C", "D"],
+                            correct: 1
+                        },
+                        {
+                            question: "🐱 What sound does a cat make?",
+                            options: ["Woof", "Meow", "Moo", "Chirp"],
+                            correct: 1
+                        }
+                    ],
+                    'medium': [
+                        {
+                            question: "📖 What is the opposite of 'big'?",
+                            options: ["Large", "Small", "Huge", "Tall"],
+                            correct: 1
+                        },
+                        {
+                            question: "🌈 What color do you get when you mix red and yellow?",
+                            options: ["Green", "Blue", "Orange", "Purple"],
+                            correct: 2
+                        }
+                    ],
+                    'hard': [
+                        {
+                            question: "📚 How many letters are in the word 'SCHOOL'?",
+                            options: ["5", "6", "7", "8"],
+                            correct: 1
+                        },
+                        {
+                            question: "✍️ What do we call a person who teaches?",
+                            options: ["Doctor", "Teacher", "Driver", "Cook"],
+                            correct: 1
+                        }
+                    ]
+                }
+            },
+            'class2': {
+                'Mathematics': {
+                    'easy': [
+                        {
+                            question: "🔢 What comes after 9?",
+                            options: ["8", "10", "11", "9"],
+                            correct: 1
+                        },
+                        {
+                            question: "➕ What is 2 + 3?",
+                            options: ["4", "5", "6", "7"],
+                            correct: 1
+                        }
+                    ],
+                    'medium': [
+                        {
+                            question: "🔢 What is 7 + 6?",
+                            options: ["12", "13", "14", "15"],
+                            correct: 1
+                        },
+                        {
+                            question: "➖ What is 12 - 5?",
+                            options: ["6", "7", "8", "9"],
+                            correct: 1
+                        }
+                    ],
+                    'hard': [
+                        {
+                            question: "🔄 What is 4 × 3?",
+                            options: ["10", "11", "12", "13"],
+                            correct: 2
+                        },
+                        {
+                            question: "➗ What is 16 ÷ 4?",
+                            options: ["3", "4", "5", "6"],
+                            correct: 1
+                        }
+                    ]
+                }
+            },
+            'class10': {
+                'Mathematics': {
+                    'easy': [
+                        {
+                            question: "📐 What is the value of π (pi) approximately?",
+                            options: ["3.14", "3.41", "4.13", "1.34"],
+                            correct: 0
+                        },
+                        {
+                            question: "🔢 What is the square root of 16?",
+                            options: ["3", "4", "5", "6"],
+                            correct: 1
+                        }
+                    ],
+                    'medium': [
+                        {
+                            question: "🔢 Solve: 2x + 5 = 15. What is x?",
+                            options: ["5", "10", "15", "20"],
+                            correct: 0
+                        },
+                        {
+                            question: "📊 What is the square root of 144?",
+                            options: ["11", "12", "13", "14"],
+                            correct: 1
+                        }
+                    ],
+                    'hard': [
+                        {
+                            question: "🔺 In a right triangle, what is the relationship between the sides?",
+                            options: ["a + b = c", "a² + b² = c²", "a × b = c", "a - b = c"],
+                            correct: 1
+                        },
+                        {
+                            question: "📈 What is the derivative of x²?",
+                            options: ["x", "2x", "x²", "2x²"],
+                            correct: 1
+                        }
+                    ]
+                },
+                'Physics': {
+                    'easy': [
+                        {
+                            question: "⚡ What is the unit of electric current?",
+                            options: ["Volt", "Ampere", "Ohm", "Watt"],
+                            correct: 1
+                        }
+                    ],
+                    'medium': [
+                        {
+                            question: "🌊 What is the speed of sound in air at 20°C?",
+                            options: ["330 m/s", "340 m/s", "350 m/s", "360 m/s"],
+                            correct: 1
+                        }
+                    ],
+                    'hard': [
+                        {
+                            question: "🔬 What is Planck's constant approximately?",
+                            options: ["6.63 × 10⁻³⁴ J·s", "6.63 × 10⁻²⁴ J·s", "6.63 × 10⁻¹⁴ J·s", "6.63 × 10⁻⁴ J·s"],
+                            correct: 0
+                        }
+                    ]
+                }
+            }
+        };
+
+        let currentClassGroup = '';
+        let currentLevel = '';
+        let currentSubject = '';
+        let currentDifficulty = '';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let quizActive = false;
+
+        function createFloatingElements() {
+            const elements = ['📚', '✏️', '🔬', '🧮', '🌍', '⚛️', '🎨', '🎵', '💡', '🏆'];
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                document.body.appendChild(element);
+                
+                setTimeout(() => {
+                    element.remove();
+                }, 10000);
+            }, 2000);
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            let breadcrumbHTML = '<div class="breadcrumb-item"><span>🏠 Select Class Group</span></div>';
+            
+            if (currentClassGroup) {
+                breadcrumbHTML += '<span class="breadcrumb-arrow">→</span>';
+                breadcrumbHTML += `<div class="breadcrumb-item"><span>📚 Classes ${currentClassGroup}</span></div>`;
+            }
+            
+            if (currentLevel) {
+                breadcrumbHTML += '<span class="breadcrumb-arrow">→</span>';
+                breadcrumbHTML += `<div class="breadcrumb-item"><span>🎯 ${currentLevel}</span></div>`;
+            }
+            
+            if (currentSubject) {
+                breadcrumbHTML += '<span class="breadcrumb-arrow">→</span>';
+                breadcrumbHTML += `<div class="breadcrumb-item"><span>📖 ${currentSubject}</span></div>`;
+            }
+            
+            if (currentDifficulty) {
+                breadcrumbHTML += '<span class="breadcrumb-arrow">→</span>';
+                const difficultyIcon = currentDifficulty === 'easy' ? '🟢' : currentDifficulty === 'medium' ? '🟡' : '🔴';
+                breadcrumbHTML += `<div class="breadcrumb-item"><span>${difficultyIcon} ${currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)}</span></div>`;
+            }
+            
+            breadcrumb.innerHTML = breadcrumbHTML;
+        }
+
+        function selectClassGroup(classGroup) {
+            currentClassGroup = classGroup;
+            
+            // Update theme
+            document.body.className = `class-${classGroup}`;
+            
+            // Update active class
+            document.querySelectorAll('.class-group').forEach(group => group.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show levels
+            showLevels(classGroup);
+            updateBreadcrumb();
+        }
+
+        function showLevels(classGroup) {
+            const levelSelector = document.getElementById('levelSelector');
+            const levels = levelsByClass[classGroup];
+            
+            levelSelector.innerHTML = '';
+            levels.forEach(level => {
+                const levelCard = document.createElement('div');
+                levelCard.className = 'level-card';
+                levelCard.innerHTML = `
+                    <div class="level-icon">${level.icon}</div>
+                    <div class="level-title">${level.name}</div>
+                    <div class="level-description">${level.description}</div>
+                    <div class="level-stats">
+                        <span>📊 ${level.stats}</span>
+                        <span>⏱️ 10-15 min</span>
+                    </div>
+                `;
+                levelCard.onclick = () => selectLevel(level.id, level.name);
+                levelSelector.appendChild(levelCard);
+            });
+            
+            levelSelector.classList.add('active');
+            
+            // Hide other selectors
+            document.getElementById('subjectSelector').classList.remove('active');
+            document.getElementById('difficultySelector').classList.remove('active');
+            document.getElementById('quizCard').classList.remove('active');
+        }
+
+        function selectLevel(levelId, levelName) {
+            currentLevel = levelName;
+            
+            // Update active level
+            document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show subjects
+            showSubjects();
+            updateBreadcrumb();
+        }
+
+        function showSubjects() {
+            const subjectSelector = document.getElementById('subjectSelector');
+            const subjects = subjectsByClass[currentClassGroup];
+            
+            subjectSelector.innerHTML = '';
+            subjects.forEach(subject => {
+                const subjectBtn = document.createElement('div');
+                const subjectClass = 'subject-' + subject.toLowerCase().replace(/[^a-z]/g, '');
+                subjectBtn.className = `subject-btn ${subjectClass}`;
+                subjectBtn.textContent = subject;
+                subjectBtn.onclick = () => selectSubject(subject);
+                subjectSelector.appendChild(subjectBtn);
+            });
+            
+            subjectSelector.classList.add('active');
+            
+            // Hide difficulty selector and quiz card
+            document.getElementById('difficultySelector').classList.remove('active');
+            document.getElementById('quizCard').classList.remove('active');
+        }
+
+        function selectSubject(subject) {
+            currentSubject = subject;
+            
+            // Update active subject
+            document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show difficulty selector
+            showDifficultySelector();
+            updateBreadcrumb();
+        }
+
+        function showDifficultySelector() {
+            const difficultySelector = document.getElementById('difficultySelector');
+            difficultySelector.classList.add('active');
+            
+            // Hide quiz card
+            document.getElementById('quizCard').classList.remove('active');
+        }
+
+        function selectDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            
+            // Update active difficulty
+            document.querySelectorAll('.difficulty-card').forEach(card => card.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Start quiz
+            startQuiz();
+            updateBreadcrumb();
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            quizActive = true;
+            
+            // Add subject-specific background to quiz card
+            const quizCard = document.getElementById('quizCard');
+            quizCard.className = 'quiz-card active';
+            const subjectClass = 'quiz-card-' + currentSubject.toLowerCase().replace(/[^a-z]/g, '');
+            quizCard.classList.add(subjectClass);
+            
+            // Update progress and load first question
+            updateProgress();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (!quizActive) return;
+            
+            const levelId = currentLevel.toLowerCase().replace(' ', '');
+            const currentQuestions = questions[levelId]?.[currentSubject]?.[currentDifficulty];
+            
+            if (!currentQuestions || currentQuestionIndex >= currentQuestions.length) {
+                completeQuiz();
+                return;
+            }
+            
+            const question = currentQuestions[currentQuestionIndex];
+            
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            selectedAnswer = null;
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectAnswer(answerIndex) {
+            selectedAnswer = answerIndex;
+            
+            document.querySelectorAll('.option').forEach((option, i) => {
+                option.classList.remove('selected');
+                if (i === answerIndex) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (!quizActive) return;
+            
+            const levelId = currentLevel.toLowerCase().replace(' ', '');
+            const currentQuestions = questions[levelId]?.[currentSubject]?.[currentDifficulty];
+            
+            if (!currentQuestions) return;
+            
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = selectedAnswer === question.correct;
+            
+            // Show feedback
+            document.querySelectorAll('.option').forEach((option, i) => {
+                if (i === question.correct) {
+                    option.classList.add('correct');
+                } else if (i === selectedAnswer && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                updateProgress();
+                
+                if (currentQuestionIndex >= currentQuestions.length) {
+                    completeQuiz();
+                } else {
+                    loadQuestion();
+                }
+            }, 1500);
+        }
+
+        function updateProgress() {
+            if (!quizActive) return;
+            
+            const levelId = currentLevel.toLowerCase().replace(' ', '');
+            const currentQuestions = questions[levelId]?.[currentSubject]?.[currentDifficulty];
+            
+            if (!currentQuestions) return;
+            
+            const progress = (currentQuestionIndex / currentQuestions.length) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('scoreDisplay').textContent = `${currentSubject} (${currentDifficulty}) - Score: ${score}/${currentQuestionIndex}`;
+            
+            // Update progress icon based on difficulty
+            const progressIcon = document.getElementById('progressIcon');
+            if (currentDifficulty === 'easy') {
+                progressIcon.textContent = progress < 50 ? '🌱' : progress < 80 ? '🌿' : '🌳';
+            } else if (currentDifficulty === 'medium') {
+                progressIcon.textContent = progress < 50 ? '🔍' : progress < 80 ? '🔬' : '🏆';
+            } else {
+                progressIcon.textContent = progress < 50 ? '🎯' : progress < 80 ? '🚀' : '👑';
+            }
+        }
+
+        function completeQuiz() {
+            quizActive = false;
+            const levelId = currentLevel.toLowerCase().replace(' ', '');
+            const currentQuestions = questions[levelId]?.[currentSubject]?.[currentDifficulty];
+            
+            if (!currentQuestions) return;
+            
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            
+            // Set celebration content based on performance and difficulty
+            const celebrationBadge = document.getElementById('celebrationBadge');
+            const celebrationTitle = document.getElementById('celebrationTitle');
+            
+            if (percentage >= 90) {
+                celebrationBadge.textContent = currentDifficulty === 'hard' ? '👑' : currentDifficulty === 'medium' ? '🏆' : '🥇';
+                celebrationTitle.textContent = currentDifficulty === 'hard' ? 'Genius Level!' : 'Outstanding!';
+            } else if (percentage >= 75) {
+                celebrationBadge.textContent = currentDifficulty === 'hard' ? '🏆' : '🥇';
+                celebrationTitle.textContent = 'Excellent Work!';
+            } else if (percentage >= 60) {
+                celebrationBadge.textContent = '🥈';
+                celebrationTitle.textContent = 'Good Job!';
+            } else {
+                celebrationBadge.textContent = '📚';
+                celebrationTitle.textContent = 'Keep Learning!';
+            }
+            
+            document.getElementById('finalScore').innerHTML = `
+                <p><strong>Level:</strong> ${currentLevel}</p>
+                <p><strong>Subject:</strong> ${currentSubject}</p>
+                <p><strong>Difficulty:</strong> ${currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)}</p>
+                <p><strong>Final Score:</strong> ${score}/${currentQuestions.length} (${percentage}%)</p>
+            `;
+            
+            document.getElementById('celebration').style.display = 'flex';
+        }
+
+        function goBack() {
+            if (quizActive) {
+                // Go back to difficulty selection
+                quizActive = false;
+                document.getElementById('quizCard').classList.remove('active');
+                document.getElementById('difficultySelector').classList.add('active');
+                
+                // Reset quiz state
+                currentQuestionIndex = 0;
+                score = 0;
+                selectedAnswer = null;
+                
+                // Reset progress
+                document.getElementById('progressFill').style.width = '0%';
+                document.getElementById('scoreDisplay').textContent = 'Select Difficulty Level';
+                document.getElementById('progressIcon').textContent = '🌟';
+                
+                updateBreadcrumb();
+            }
+        }
+
+        function restartQuiz() {
+            quizActive = false;
+            currentClassGroup = '';
+            currentLevel = '';
+            currentSubject = '';
+            currentDifficulty = '';
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            document.getElementById('celebration').style.display = 'none';
+            document.getElementById('quizCard').classList.remove('active');
+            document.getElementById('difficultySelector').classList.remove('active');
+            document.getElementById('subjectSelector').classList.remove('active');
+            document.getElementById('levelSelector').classList.remove('active');
+            
+            // Reset selections
+            document.querySelectorAll('.class-group').forEach(group => group.classList.remove('active'));
+            document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.difficulty-card').forEach(card => card.classList.remove('active'));
+            
+            // Reset progress
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('scoreDisplay').textContent = 'Select Class & Level';
+            document.getElementById('progressIcon').textContent = '🌟';
+            
+            // Reset theme
+            document.body.className = '';
+            
+            updateBreadcrumb();
+        }
+
+        // Chatbot functionality (same as before)
+        let chatbotOpen = false;
+
+        function toggleChatbot() {
+            chatbotOpen = !chatbotOpen;
+            const container = document.getElementById('chatbotContainer');
+            const toggle = document.getElementById('chatbotToggle');
+            
+            if (chatbotOpen) {
+                container.classList.add('open');
+                toggle.classList.add('hidden');
+            } else {
+                container.classList.remove('open');
+                toggle.classList.remove('hidden');
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateAIResponse(message);
+                    addMessage(response, 'bot');
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            const messagesContainer = document.getElementById('chatbotMessages');
+            indicator.style.display = 'flex';
+            messagesContainer.appendChild(indicator);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'none';
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Enhanced responses for multi-level system
+            if (lowerMessage.includes('level') || lowerMessage.includes('difficulty')) {
+                const levelResponses = [
+                    "🎯 Great question about difficulty levels! Our system has Easy (🟢), Medium (🟡), and Hard (🔴) levels for every subject. Easy builds confidence, Medium develops skills, and Hard prepares you for advanced challenges. Which level interests you?",
+                    "📊 Each difficulty level is designed for different learning goals: Easy for foundation building, Medium for skill development, and Hard for mastery. You can progress through levels as you improve. What subject would you like to practice?",
+                    "🌟 The multi-level system adapts to your learning pace! Start with Easy to build confidence, move to Medium for balanced challenges, and tackle Hard for exam preparation. Which class and subject are you focusing on?"
+                ];
+                return levelResponses[Math.floor(Math.random() * levelResponses.length)];
+            }
+            
+            // Mathematics responses
+            if (lowerMessage.includes('math') || lowerMessage.includes('algebra') || lowerMessage.includes('geometry') || lowerMessage.includes('calculus')) {
+                const mathResponses = [
+                    "📐 Mathematics is the language of the universe! Whether you're working with basic arithmetic or advanced calculus, remember that practice makes perfect. What specific math topic would you like help with?",
+                    "🔢 Math can be challenging, but it's also incredibly rewarding! Start with understanding the fundamentals, then build up to more complex concepts. Would you like me to explain any particular mathematical concept?",
+                    "📊 Mathematics is everywhere - from calculating tips to understanding physics! The key is to see the patterns and relationships. What math problem are you working on?",
+                    "∫ From basic counting to differential equations, math builds upon itself. Each concept you learn becomes a tool for the next level. What mathematical area interests you most?"
+                ];
+                return mathResponses[Math.floor(Math.random() * mathResponses.length)];
+            }
+            
+            // Science responses
+            if (lowerMessage.includes('science') || lowerMessage.includes('physics') || lowerMessage.includes('chemistry') || lowerMessage.includes('biology')) {
+                const scienceResponses = [
+                    "🔬 Science is all about curiosity and discovery! Whether it's understanding how atoms work, how plants grow, or how the universe expands, science helps us make sense of our world. What scientific concept fascinates you?",
+                    "⚛️ The beauty of science lies in its ability to explain the 'why' behind everything we observe. From the smallest particles to the largest galaxies, there's always something amazing to learn!",
+                    "🧬 Science connects everything - biology explains life, chemistry explains matter, and physics explains motion and energy. They all work together to help us understand reality!",
+                    "🌍 Science isn't just about memorizing facts - it's about developing critical thinking and problem-solving skills that you'll use throughout your life. What area of science interests you most?"
+                ];
+                return scienceResponses[Math.floor(Math.random() * scienceResponses.length)];
+            }
+            
+            // English/Language responses
+            if (lowerMessage.includes('english') || lowerMessage.includes('grammar') || lowerMessage.includes('writing') || lowerMessage.includes('literature')) {
+                const englishResponses = [
+                    "📚 English is your gateway to effective communication! Good grammar, vocabulary, and writing skills will serve you well in every subject and career. What aspect of English would you like to improve?",
+                    "✍️ Reading and writing are superpowers! They help you express ideas clearly, understand complex concepts, and connect with people across time and cultures. What are you reading lately?",
+                    "📖 Literature opens windows to different worlds and perspectives. Every story teaches us something about human nature and society. Do you have a favorite book or author?",
+                    "🔤 Strong language skills boost your performance in all subjects. Whether you're writing a science report or solving word problems in math, clear communication is key!"
+                ];
+                return englishResponses[Math.floor(Math.random() * englishResponses.length)];
+            }
+            
+            // History responses
+            if (lowerMessage.includes('history') || lowerMessage.includes('historical') || lowerMessage.includes('past')) {
+                const historyResponses = [
+                    "🏛️ History is the story of humanity! Understanding the past helps us make sense of the present and make better decisions for the future. What historical period interests you most?",
+                    "📜 Every historical event is connected to others - like pieces of a giant puzzle. Learning about cause and effect in history develops critical thinking skills you'll use everywhere!",
+                    "🌍 History isn't just dates and names - it's about real people who faced challenges, made discoveries, and shaped our world. Their stories can inspire and guide us today!",
+                    "⚔️ From ancient civilizations to modern times, history shows us how societies develop, how conflicts arise and resolve, and how human progress happens. What historical topic fascinates you?"
+                ];
+                return historyResponses[Math.floor(Math.random() * historyResponses.length)];
+            }
+            
+            // Geography responses
+            if (lowerMessage.includes('geography') || lowerMessage.includes('countries') || lowerMessage.includes('maps') || lowerMessage.includes('climate')) {
+                const geoResponses = [
+                    "🗺️ Geography connects the physical world with human society! Understanding locations, climates, and cultures helps you become a global citizen. What part of the world interests you most?",
+                    "🌍 Geography is more than memorizing capitals - it's about understanding how location affects everything from weather patterns to economic development. Where would you like to explore?",
+                    "🏔️ From towering mountains to deep oceans, our planet is incredibly diverse! Geography helps us understand these natural wonders and how humans interact with them.",
+                    "🌦️ Climate, resources, and location shape how people live around the world. Geography helps us understand these connections and appreciate our planet's diversity!"
+                ];
+                return geoResponses[Math.floor(Math.random() * geoResponses.length)];
+            }
+            
+            // Study tips and motivation
+            if (lowerMessage.includes('study') || lowerMessage.includes('learn') || lowerMessage.includes('tips') || lowerMessage.includes('help')) {
+                const studyResponses = [
+                    "📚 Great study habits: 1) Set specific goals 2) Take regular breaks 3) Practice active recall 4) Teach concepts to others 5) Connect new info to what you know 6) Stay consistent! What subject are you studying?",
+                    "💡 Learning is like building muscle - it gets stronger with practice! Try different techniques: flashcards, mind maps, practice problems, or explaining concepts out loud. What works best for you?",
+                    "🎯 Focus on understanding, not just memorizing. Ask 'why' and 'how' questions. Make connections between topics. This deeper learning lasts longer and makes everything easier!",
+                    "⏰ Time management is key! Break big tasks into smaller ones, use a planner, and prioritize important assignments. Remember: consistent daily effort beats last-minute cramming!"
+                ];
+                return studyResponses[Math.floor(Math.random() * studyResponses.length)];
+            }
+            
+            // Exam preparation
+            if (lowerMessage.includes('exam') || lowerMessage.includes('test') || lowerMessage.includes('preparation') || lowerMessage.includes('nervous')) {
+                const examResponses = [
+                    "📝 Exam success strategy: Review regularly (don't cram!), practice with past papers, get enough sleep, eat well, and stay positive. Remember - you've prepared for this! What exam are you preparing for?",
+                    "🎯 Before exams: Make a study schedule, identify weak areas, practice time management, and stay calm. During exams: Read questions carefully, manage your time, and check your answers!",
+                    "💪 Feeling nervous is normal! Channel that energy into focused preparation. Practice relaxation techniques, visualize success, and remember that exams test what you know, not who you are.",
+                    "🏆 Exam tips: Start with questions you know well to build confidence, allocate time wisely, show your work in math/science, and don't spend too long on any one question. You've got this!"
+                ];
+                return examResponses[Math.floor(Math.random() * examResponses.length)];
+            }
+            
+            // Career guidance
+            if (lowerMessage.includes('career') || lowerMessage.includes('future') || lowerMessage.includes('job') || lowerMessage.includes('profession')) {
+                const careerResponses = [
+                    "🚀 Your education opens doors to amazing careers! Every subject you study develops skills that employers value. What interests you most - solving problems, helping people, creating things, or discovering new knowledge?",
+                    "💼 The future job market will need people who can think critically, communicate well, and adapt to change. That's exactly what you're developing in school! What kind of work excites you?",
+                    "🌟 Don't worry about choosing the 'perfect' career right now. Focus on developing strong fundamentals in all subjects - they'll serve you well in any field you choose later!",
+                    "🎓 Many successful people changed careers multiple times! The key is building a strong educational foundation and staying curious. What subjects do you enjoy most?"
+                ];
+                return careerResponses[Math.floor(Math.random() * careerResponses.length)];
+            }
+            
+            // Motivation and encouragement
+            if (lowerMessage.includes('difficult') || lowerMessage.includes('hard') || lowerMessage.includes('struggling') || lowerMessage.includes('frustrated')) {
+                const motivationResponses = [
+                    "💪 Every expert was once a beginner! Struggling with difficult concepts is part of learning - it means your brain is growing. Break the problem into smaller parts and tackle them one by one.",
+                    "🌱 Learning is like growing a plant - it takes time, patience, and consistent care. Don't get discouraged by temporary setbacks. Every mistake is a step toward understanding!",
+                    "🏔️ The most rewarding achievements come after overcoming challenges. That difficult topic you're struggling with today might become your strength tomorrow. Keep pushing forward!",
+                    "✨ Remember: You don't have to be perfect, just persistent. Ask for help when needed, celebrate small victories, and trust in your ability to learn and grow!"
+                ];
+                return motivationResponses[Math.floor(Math.random() * motivationResponses.length)];
+            }
+            
+            // Specific subject help requests
+            if (lowerMessage.includes('explain') || lowerMessage.includes('what is') || lowerMessage.includes('how does')) {
+                return "🤔 I'd love to help explain that concept! Could you be more specific about which topic you'd like me to explain? For example, you could ask about 'photosynthesis in biology' or 'quadratic equations in math' or 'the water cycle in geography'. The more specific you are, the better I can help! 📚";
+            }
+            
+            // Greetings
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                const greetings = [
+                    "Hello there! 👋 I'm excited to help you with your studies! What subject would you like to explore today?",
+                    "Hi! 🌟 Ready to learn something amazing? I can help with any subject from Classes 1-12 across all difficulty levels. What's on your mind?",
+                    "Hey! 📚 Great to see you here! Whether it's math, science, English, or any other subject, I'm here to help. What would you like to learn about?"
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            // Thanks
+            if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
+                const thanksResponses = [
+                    "You're very welcome! 😊 I'm always here to help you learn and grow. Keep asking questions - that's how we discover amazing things!",
+                    "Happy to help! 🌟 Remember, every question you ask makes you smarter. Keep that curiosity alive!",
+                    "My pleasure! 📚 Learning is a journey, and I'm glad to be part of yours. What else would you like to explore?"
+                ];
+                return thanksResponses[Math.floor(Math.random() * thanksResponses.length)];
+            }
+            
+            // Default response
+            const defaultResponses = [
+                "That's an interesting question! 🤔 I'd love to help you explore that topic further. Could you tell me which subject area you're asking about? I can help with Math, Science, English, History, Geography, and more across all difficulty levels!",
+                "Great question! 💡 I'm here to help with all subjects from Classes 1-12 with Easy, Medium, and Hard difficulty levels. Could you be more specific about what you'd like to learn? For example, are you asking about a math concept, science topic, or something else?",
+                "I'm excited to help you learn! 📚 To give you the best answer, could you tell me which class level and subject you're interested in? I have knowledge across all academic areas and difficulty levels!",
+                "Wonderful curiosity! 🌟 Learning happens when we ask questions. Could you help me understand exactly what you'd like to know more about? I'm here to make any topic clear and interesting at the right difficulty level for you!"
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Initialize
+        createFloatingElements();
+        updateBreadcrumb();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969f955084ec5472',t:'MTc1NDMyNjUzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
