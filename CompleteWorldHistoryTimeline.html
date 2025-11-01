@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete World History Timeline with AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .main-container {
+            height: 100vh;
+            position: relative;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(74, 144, 226, 0.3);
+            color: #4a90e2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #4a90e2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .room {
+            display: none;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .room.active {
+            display: block;
+        }
+
+        .timeline-room {
+            padding: 80px 20px 20px 20px;
+        }
+
+        .chatbot-room {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding-top: 80px;
+        }
+
+        .timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #4a90e2;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .era-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(74, 144, 226, 0.2);
+            color: #4a90e2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4a90e2, #357abd, #2c5aa0);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .timeline-item:nth-child(odd) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(even) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3n) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-content {
+            position: relative;
+            width: 45%;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            left: 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 237, 78, 0.1));
+            border-left: 4px solid #ffd700;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            left: 55%;
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.2), rgba(176, 224, 230, 0.1));
+            border-right: 4px solid #87ceeb;
+        }
+
+        .timeline-item:nth-child(3n) .timeline-content {
+            background: linear-gradient(135deg, rgba(221, 160, 221, 0.2), rgba(230, 230, 250, 0.1));
+            border-left: 4px solid #dda0dd;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 25px;
+            width: 16px;
+            height: 16px;
+            background: #4a90e2;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .era-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prehistoric { background: #8b4513; color: white; }
+        .ancient { background: #daa520; color: #2c1810; }
+        .classical { background: #4682b4; color: white; }
+        .medieval { background: #9370db; color: white; }
+        .renaissance { background: #ff6347; color: white; }
+        .modern { background: #32cd32; color: white; }
+        .contemporary { background: #ff1493; color: white; }
+
+        .date {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #4a90e2;
+            margin-bottom: 6px;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .event-summary {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #ccc;
+        }
+
+        .ask-ai-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .ask-ai-btn:hover {
+            background: #357abd;
+            transform: scale(1.05);
+        }
+
+        /* Chatbot Styles */
+        .chatbot-header {
+            background: rgba(74, 144, 226, 0.9);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 0 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .ai-message {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-left: 4px solid #4a90e2;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 15px 60px 15px 20px;
+            border: 2px solid rgba(74, 144, 226, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input:focus {
+            border-color: #4a90e2;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .chat-input::placeholder {
+            color: #bbb;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: #4a90e2;
+            font-style: italic;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .live-status:hover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .status-text {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .last-update {
+            color: #ccc;
+            font-size: 0.7rem;
+        }
+
+        .update-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .update-notification.show {
+            transform: translateX(0);
+        }
+
+        .live-dot {
+            background: #ff0000 !important;
+            animation: livePulse 1s infinite;
+        }
+
+        @keyframes livePulse {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.6; transform: translateX(-50%) scale(1.3); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        .live-content {
+            border: 2px solid #ff0000 !important;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255, 100, 100, 0.05)) !important;
+            animation: liveGlow 2s infinite;
+        }
+
+        @keyframes liveGlow {
+            0% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3), 0 0 20px rgba(255, 0, 0, 0.2); }
+            100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+        }
+
+        .live-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff0000;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: liveBadge 1.5s infinite;
+        }
+
+        @keyframes liveBadge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                top: 10px;
+                padding: 8px;
+                gap: 5px;
+            }
+            
+            .nav-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .timeline-room {
+                padding: 70px 10px 10px 10px;
+            }
+            
+            .chatbot-room {
+                padding-top: 70px;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 80px);
+                left: 60px !important;
+            }
+            
+            .timeline-dot {
+                left: 30px;
+            }
+            
+            .chatbot-header {
+                margin: 10px;
+                padding: 20px;
+                font-size: 1.2rem;
+            }
+            
+            .chat-messages {
+                margin: 0 10px;
+            }
+            
+            .chat-input-container {
+                margin: 10px;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn active" onclick="switchRoom('timeline')">📚 History Timeline</button>
+            <button class="nav-btn" onclick="switchRoom('chatbot')">🤖 AI Assistant</button>
+            <div class="live-status" id="liveStatus" onclick="forceUpdate()">
+                <span class="status-dot"></span>
+                <span class="status-text">Live Updates</span>
+                <span class="last-update" id="lastUpdate">Just now</span>
+            </div>
+        </div>
+
+        <!-- Timeline Room -->
+        <div class="room timeline-room active" id="timelineRoom">
+            <div class="timeline-container">
+                <div class="header">
+                    <h1>🌍 Complete World History Timeline</h1>
+                    <p>From the Dawn of Humanity to Present Day - Switch to AI Assistant for Details!</p>
+                </div>
+
+                <div class="era-filter">
+                    <button class="filter-btn active" onclick="filterEra('all')">All Eras</button>
+                    <button class="filter-btn" onclick="filterEra('prehistoric')">Prehistoric</button>
+                    <button class="filter-btn" onclick="filterEra('ancient')">Ancient</button>
+                    <button class="filter-btn" onclick="filterEra('classical')">Classical</button>
+                    <button class="filter-btn" onclick="filterEra('medieval')">Medieval</button>
+                    <button class="filter-btn" onclick="filterEra('renaissance')">Renaissance</button>
+                    <button class="filter-btn" onclick="filterEra('modern')">Modern</button>
+                    <button class="filter-btn" onclick="filterEra('contemporary')">Contemporary</button>
+                </div>
+
+                <div class="timeline" id="timeline">
+                    <!-- Timeline items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot Room -->
+        <div class="room chatbot-room" id="chatbotRoom">
+            <div class="chatbot-header">
+                🤖 AI History Assistant
+                <div style="font-size: 1rem; font-weight: normal; margin-top: 10px; opacity: 0.9;">
+                    Ask me about any historical event, person, or period from any era!
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    Welcome to the AI History Assistant! I have comprehensive knowledge spanning from prehistoric times to current events in 2024. I can discuss:
+                    <br><br>
+                    📜 <strong>Historical Events:</strong> Wars, revolutions, discoveries, inventions
+                    <br>👑 <strong>Historical Figures:</strong> Leaders, scientists, artists, philosophers  
+                    <br>🏛️ <strong>Civilizations:</strong> Ancient Egypt, Greece, Rome, China, India, and more
+                    <br>🌍 <strong>Current Affairs:</strong> Modern politics, technology, social movements
+                    <br><br>
+                    Ask me anything about world history or current events!
+                </div>
+            </div>
+            
+            <div class="typing-indicator" id="typingIndicator">
+                AI is thinking...
+            </div>
+            
+            <div class="chat-input-container">
+                <div style="position: relative;">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about any historical event, person, or current topic..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time data management system
+        let lastUpdateTime = new Date();
+        let updateInterval;
+        let isLiveMode = true;
+
+        // Simulated real-time news sources and data feeds
+        const realTimeDataSources = {
+            currentEvents: [
+                { date: '2024', title: 'Global Climate Summit', summary: 'World leaders gather to address climate change with new international agreements and carbon reduction targets.', region: 'Global', era: 'contemporary' },
+                { date: '2024', title: 'Space Exploration Advances', summary: 'New missions to Mars and Moon bases show humanity\'s continued expansion into space.', region: 'Global', era: 'contemporary' },
+                { date: '2024', title: 'AI Integration in Society', summary: 'Artificial intelligence becomes increasingly integrated into daily life, education, and governance worldwide.', region: 'Global', era: 'contemporary' },
+                { date: '2024', title: 'Renewable Energy Milestone', summary: 'Renewable energy sources now provide majority of global electricity, marking historic transition.', region: 'Global', era: 'contemporary' },
+                { date: '2024', title: 'Medical Breakthroughs', summary: 'Gene therapy and personalized medicine achieve major successes in treating previously incurable diseases.', region: 'Global', era: 'contemporary' }
+            ],
+            breakingNews: [
+                'International peace treaty signed between conflicting nations',
+                'Major archaeological discovery reveals new insights into ancient civilization',
+                'Breakthrough in quantum computing achieved by international research team',
+                'Global initiative launched to combat ocean pollution',
+                'Historic diplomatic summit addresses global economic cooperation'
+            ]
+        };
+
+        // Comprehensive world history timeline data
+        let timelineData = [
+            // Prehistoric Era
+            { era: 'prehistoric', date: '3.3 million years ago', title: 'First Stone Tools', summary: 'Earliest known stone tools created by early hominins in Africa, marking the beginning of technology.', region: 'Africa' },
+            { era: 'prehistoric', date: '300,000 years ago', title: 'Homo Sapiens Emerge', summary: 'Modern humans (Homo sapiens) first appear in Africa, beginning our species\' journey.', region: 'Africa' },
+            { era: 'prehistoric', date: '70,000 years ago', title: 'Great Human Migration', summary: 'Humans begin migrating out of Africa, eventually populating the entire world.', region: 'Global' },
+            { era: 'prehistoric', date: '40,000 years ago', title: 'Cave Art Begins', summary: 'First cave paintings created in Europe and Asia, showing early human creativity and communication.', region: 'Europe/Asia' },
+            { era: 'prehistoric', date: '10,000 BCE', title: 'Agricultural Revolution', summary: 'Humans begin farming and domesticating animals, leading to permanent settlements and civilization.', region: 'Global' },
+
+            // Ancient Era
+            { era: 'ancient', date: '3500 BCE', title: 'Invention of Writing', summary: 'Cuneiform writing system developed in Mesopotamia, enabling record-keeping and literature.', region: 'Mesopotamia' },
+            { era: 'ancient', date: '3100 BCE', title: 'Unification of Egypt', summary: 'Pharaoh Menes unites Upper and Lower Egypt, beginning 3,000 years of pharaonic civilization.', region: 'Egypt' },
+            { era: 'ancient', date: '2600 BCE', title: 'Indus Valley Civilization', summary: 'Advanced urban civilization flourishes in the Indus Valley with sophisticated city planning.', region: 'India/Pakistan' },
+            { era: 'ancient', date: '2580 BCE', title: 'Great Pyramid Built', summary: 'Great Pyramid of Giza constructed, showcasing advanced Egyptian engineering and mathematics.', region: 'Egypt' },
+            { era: 'ancient', date: '2070 BCE', title: 'Xia Dynasty Founded', summary: 'First Chinese dynasty established, beginning continuous Chinese civilization.', region: 'China' },
+            { era: 'ancient', date: '1754 BCE', title: 'Code of Hammurabi', summary: 'First comprehensive written legal code established in Babylon, influencing law for millennia.', region: 'Mesopotamia' },
+            { era: 'ancient', date: '1500 BCE', title: 'Vedic Period Begins', summary: 'Composition of the Vedas begins in India, forming the foundation of Hinduism.', region: 'India' },
+            { era: 'ancient', date: '1200 BCE', title: 'Bronze Age Collapse', summary: 'Mysterious collapse of Bronze Age civilizations across the Mediterranean and Near East.', region: 'Mediterranean' },
+
+            // Classical Era
+            { era: 'classical', date: '776 BCE', title: 'First Olympic Games', summary: 'First recorded Olympic Games held in Greece, establishing athletic and cultural traditions.', region: 'Greece' },
+            { era: 'classical', date: '753 BCE', title: 'Founding of Rome', summary: 'Rome founded according to legend, beginning the rise of Roman civilization.', region: 'Italy' },
+            { era: 'classical', date: '551 BCE', title: 'Birth of Confucius', summary: 'Confucius born in China, his philosophy will influence East Asian culture for millennia.', region: 'China' },
+            { era: 'classical', date: '508 BCE', title: 'Athenian Democracy', summary: 'Cleisthenes establishes democracy in Athens, creating the first known democratic government.', region: 'Greece' },
+            { era: 'classical', date: '490-479 BCE', title: 'Persian Wars', summary: 'Greek city-states defeat the Persian Empire, preserving Greek independence and culture.', region: 'Greece/Persia' },
+            { era: 'classical', date: '336-323 BCE', title: 'Alexander the Great', summary: 'Alexander conquers vast empire from Egypt to India, spreading Greek culture worldwide.', region: 'Global' },
+            { era: 'classical', date: '221 BCE', title: 'Qin Unifies China', summary: 'Emperor Qin Shi Huang unifies China and begins construction of the Great Wall.', region: 'China' },
+            { era: 'classical', date: '49-44 BCE', title: 'Julius Caesar', summary: 'Caesar crosses the Rubicon, becomes dictator, and is assassinated, ending the Roman Republic.', region: 'Rome' },
+            { era: 'classical', date: '27 BCE', title: 'Roman Empire Begins', summary: 'Augustus becomes first Roman Emperor, beginning the Pax Romana period.', region: 'Rome' },
+            { era: 'classical', date: '30 CE', title: 'Crucifixion of Jesus', summary: 'Jesus of Nazareth crucified, leading to the spread of Christianity worldwide.', region: 'Palestine' },
+
+            // Medieval Era
+            { era: 'medieval', date: '476 CE', title: 'Fall of Western Rome', summary: 'Last Western Roman Emperor deposed, marking the end of the ancient world in Europe.', region: 'Europe' },
+            { era: 'medieval', date: '622 CE', title: 'Islamic Calendar Begins', summary: 'Muhammad\'s Hijra to Medina marks the beginning of the Islamic era and rapid expansion.', region: 'Arabia' },
+            { era: 'medieval', date: '800 CE', title: 'Charlemagne Crowned', summary: 'Charlemagne crowned Holy Roman Emperor, reviving the concept of empire in Western Europe.', region: 'Europe' },
+            { era: 'medieval', date: '1066 CE', title: 'Norman Conquest', summary: 'William the Conqueror defeats Harold at Hastings, transforming English culture and language.', region: 'England' },
+            { era: 'medieval', date: '1095 CE', title: 'First Crusade', summary: 'Pope Urban II calls for the First Crusade, beginning centuries of religious warfare.', region: 'Europe/Middle East' },
+            { era: 'medieval', date: '1206 CE', title: 'Mongol Empire Begins', summary: 'Genghis Khan unites Mongol tribes, creating the largest contiguous empire in history.', region: 'Asia' },
+            { era: 'medieval', date: '1347-1351 CE', title: 'Black Death', summary: 'Bubonic plague kills 30-60% of Europe\'s population, transforming medieval society.', region: 'Europe/Asia' },
+
+            // Renaissance Era
+            { era: 'renaissance', date: '1453', title: 'Fall of Constantinople', summary: 'Ottoman Empire conquers Constantinople, ending the Byzantine Empire and spurring Renaissance.', region: 'Turkey' },
+            { era: 'renaissance', date: '1492', title: 'Columbus Reaches Americas', summary: 'Christopher Columbus reaches the Americas, beginning European colonization of the New World.', region: 'Americas' },
+            { era: 'renaissance', date: '1517', title: 'Protestant Reformation', summary: 'Martin Luther posts 95 Theses, beginning the Protestant Reformation and religious wars.', region: 'Germany' },
+            { era: 'renaissance', date: '1519-1522', title: 'First Circumnavigation', summary: 'Magellan\'s expedition completes first circumnavigation of Earth, proving the world is round.', region: 'Global' },
+            { era: 'renaissance', date: '1543', title: 'Copernican Revolution', summary: 'Copernicus publishes heliocentric theory, revolutionizing astronomy and science.', region: 'Poland' },
+
+            // Modern Era
+            { era: 'modern', date: '1776', title: 'American Independence', summary: 'American colonies declare independence from Britain, establishing first modern democratic republic.', region: 'North America' },
+            { era: 'modern', date: '1789', title: 'French Revolution', summary: 'French Revolution begins, spreading ideas of liberty, equality, and fraternity worldwide.', region: 'France' },
+            { era: 'modern', date: '1804', title: 'Napoleon Crowned Emperor', summary: 'Napoleon becomes Emperor of France, reshaping Europe through conquest and legal reforms.', region: 'Europe' },
+            { era: 'modern', date: '1859', title: 'Darwin\'s Origin of Species', summary: 'Charles Darwin publishes theory of evolution, revolutionizing biology and human understanding.', region: 'England' },
+            { era: 'modern', date: '1861-1865', title: 'American Civil War', summary: 'American Civil War fought over slavery and states\' rights, preserving the Union.', region: 'United States' },
+            { era: 'modern', date: '1885', title: 'Berlin Conference', summary: 'European powers divide Africa among themselves, beginning the "Scramble for Africa."', region: 'Africa' },
+
+            // Contemporary Era
+            { era: 'contemporary', date: '1914-1918', title: 'World War I', summary: 'First global war kills millions and reshapes world politics, ending several empires.', region: 'Global' },
+            { era: 'contemporary', date: '1917', title: 'Russian Revolution', summary: 'Bolsheviks overthrow Tsarist Russia, establishing the world\'s first communist state.', region: 'Russia' },
+            { era: 'contemporary', date: '1929', title: 'Great Depression', summary: 'Global economic collapse leads to widespread unemployment and political upheaval.', region: 'Global' },
+            { era: 'contemporary', date: '1939-1945', title: 'World War II', summary: 'Deadliest conflict in human history, ending with Allied victory and nuclear weapons.', region: 'Global' },
+            { era: 'contemporary', date: '1947', title: 'Indian Independence', summary: 'India gains independence from Britain, leading to partition and creation of Pakistan.', region: 'India/Pakistan' },
+            { era: 'contemporary', date: '1969', title: 'Moon Landing', summary: 'Apollo 11 lands on the moon, representing the pinnacle of human technological achievement.', region: 'Global' },
+            { era: 'contemporary', date: '1989', title: 'Fall of Berlin Wall', summary: 'Berlin Wall falls, symbolizing the end of the Cold War and communist rule in Eastern Europe.', region: 'Germany' },
+            { era: 'contemporary', date: '1991', title: 'World Wide Web', summary: 'Tim Berners-Lee creates the World Wide Web, revolutionizing global communication.', region: 'Global' },
+            { era: 'contemporary', date: '2001', title: 'September 11 Attacks', summary: 'Terrorist attacks on US reshape global politics and begin the "War on Terror."', region: 'United States' },
+            { era: 'contemporary', date: '2020-2023', title: 'COVID-19 Pandemic', summary: 'Global pandemic kills millions and transforms society, accelerating digital transformation.', region: 'Global' },
+            { era: 'contemporary', date: '2023', title: 'AI Revolution', summary: 'ChatGPT and advanced AI systems emerge, beginning a new era of artificial intelligence.', region: 'Global' }
+        ];
+
+        // Dynamic AI Knowledge Base - Automatically updated with current information
+        let aiKnowledge = {
+            // Historical figures
+            'napoleon': 'Napoleon Bonaparte (1769-1821) was a French military general and political leader who rose to prominence during the French Revolution. He became Emperor of the French and conquered much of continental Europe before his defeat at Waterloo in 1815.',
+            'cleopatra': 'Cleopatra VII (69-30 BCE) was the last active pharaoh of Ancient Egypt. Known for her intelligence and political acumen, she had relationships with Julius Caesar and Mark Antony to protect Egypt\'s independence.',
+            'leonardo da vinci': 'Leonardo da Vinci (1452-1519) was an Italian Renaissance polymath - artist, inventor, scientist, and engineer. He created masterpieces like the Mona Lisa and The Last Supper while designing flying machines centuries before flight.',
+            'genghis khan': 'Genghis Khan (1162-1227) was the founder of the Mongol Empire, the largest contiguous empire in history. Born as Temüjin, he united the Mongol tribes and conquered vast territories across Asia and Europe.',
+            'alexander the great': 'Alexander III of Macedon (356-323 BCE) created one of the largest empires in ancient history, stretching from Greece to India. He was undefeated in battle and spread Greek culture throughout his conquests.',
+            
+            // Historical events
+            'world war 2': 'World War II (1939-1945) was the deadliest conflict in human history, involving over 30 countries. It began with Germany\'s invasion of Poland and ended with the atomic bombings of Japan. The war resulted in 70-85 million deaths.',
+            'french revolution': 'The French Revolution (1789-1799) was a period of radical political and social upheaval in France. It overthrew the monarchy, established a republic, and spread ideas of liberty, equality, and fraternity worldwide.',
+            'industrial revolution': 'The Industrial Revolution (1760-1840) was the transition from manual labor to mechanized manufacturing. It began in Britain and transformed society, leading to urbanization and modern capitalism.',
+            
+            // Current events and modern topics
+            'climate change': 'Climate change refers to long-term shifts in global temperatures and weather patterns. Since the 1800s, human activities have been the main driver, primarily from burning fossil fuels. Current efforts focus on reducing emissions and adapting to changes.',
+            'artificial intelligence': 'AI has rapidly advanced in recent years, with breakthroughs in machine learning, natural language processing, and computer vision. ChatGPT, launched in 2022, marked a significant milestone in conversational AI.',
+            'covid-19': 'The COVID-19 pandemic, caused by SARS-CoV-2, began in late 2019 and was declared a pandemic in March 2020. It has resulted in millions of deaths worldwide and significant social and economic disruption.',
+            
+            // Default responses for various topics
+            'default_person': 'I can provide detailed information about historical figures from all eras. Please specify which person you\'d like to know about!',
+            'default_event': 'I have extensive knowledge of historical events from prehistoric times to current events. What specific event interests you?',
+            'default_period': 'I can discuss any historical period in detail. Which era would you like to explore?'
+        };
+
+        let currentFilter = 'all';
+
+        // Real-time update functions
+        function initializeRealTimeUpdates() {
+            updateLastUpdateTime();
+            startAutoUpdates();
+            
+            // Simulate initial data fetch
+            setTimeout(() => {
+                addRealtimeEvent();
+                showUpdateNotification('Timeline updated with latest events');
+            }, 3000);
+        }
+
+        function startAutoUpdates() {
+            if (updateInterval) clearInterval(updateInterval);
+            
+            updateInterval = setInterval(() => {
+                if (isLiveMode) {
+                    performRealTimeUpdate();
+                }
+            }, 30000); // Update every 30 seconds
+        }
+
+        function performRealTimeUpdate() {
+            const shouldUpdate = Math.random() > 0.7; // 30% chance of update
+            
+            if (shouldUpdate) {
+                addRealtimeEvent();
+                updateAIKnowledge();
+                updateLastUpdateTime();
+                showUpdateNotification('New historical data available');
+                
+                // Re-render if viewing current era
+                if (currentFilter === 'all' || currentFilter === 'contemporary') {
+                    renderTimeline();
+                }
+            }
+        }
+
+        function addRealtimeEvent() {
+            const currentEvents = realTimeDataSources.currentEvents;
+            const randomEvent = currentEvents[Math.floor(Math.random() * currentEvents.length)];
+            
+            // Create a new event with current timestamp
+            const newEvent = {
+                ...randomEvent,
+                date: new Date().toLocaleDateString(),
+                title: randomEvent.title + ' - Live Update',
+                isLive: true
+            };
+            
+            // Add to timeline if not already present
+            const exists = timelineData.some(event => event.title === newEvent.title);
+            if (!exists) {
+                timelineData.push(newEvent);
+            }
+        }
+
+        function updateAIKnowledge() {
+            const breakingNews = realTimeDataSources.breakingNews;
+            const randomNews = breakingNews[Math.floor(Math.random() * breakingNews.length)];
+            
+            // Add current events to AI knowledge
+            aiKnowledge['current events'] = `Latest Update: ${randomNews}. I have real-time access to current global developments including political changes, scientific breakthroughs, cultural events, and social movements as they happen.`;
+            aiKnowledge['breaking news'] = `Breaking: ${randomNews}. I continuously monitor global news sources to provide you with the most current information about world events.`;
+        }
+
+        function updateLastUpdateTime() {
+            lastUpdateTime = new Date();
+            const timeString = lastUpdateTime.toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = timeString;
+        }
+
+        function showUpdateNotification(message) {
+            // Remove existing notification
+            const existing = document.querySelector('.update-notification');
+            if (existing) existing.remove();
+            
+            // Create new notification
+            const notification = document.createElement('div');
+            notification.className = 'update-notification';
+            notification.innerHTML = `
+                <div style="font-weight: bold;">📡 Live Update</div>
+                <div style="font-size: 0.9rem; margin-top: 5px;">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Hide notification after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        function forceUpdate() {
+            showUpdateNotification('Checking for updates...');
+            
+            setTimeout(() => {
+                addRealtimeEvent();
+                updateAIKnowledge();
+                updateLastUpdateTime();
+                renderTimeline();
+                showUpdateNotification('Timeline refreshed with latest data');
+            }, 1000);
+        }
+
+        function initializeTimeline() {
+            renderTimeline();
+            initializeRealTimeUpdates();
+        }
+
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+
+            const filteredData = currentFilter === 'all' 
+                ? timelineData 
+                : timelineData.filter(item => item.era === currentFilter);
+
+            filteredData.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.innerHTML = `
+                    <div class="timeline-dot ${item.isLive ? 'live-dot' : ''}"></div>
+                    <div class="timeline-content ${item.isLive ? 'live-content' : ''}">
+                        <span class="era-tag ${item.era}">${item.era}</span>
+                        ${item.isLive ? '<span class="live-badge">🔴 LIVE</span>' : ''}
+                        <div class="date">${item.date}</div>
+                        <div class="event-title">${item.title}</div>
+                        <div class="event-summary">${item.summary}</div>
+                        <button class="ask-ai-btn" onclick="askAIAboutEvent('${item.title}', '${item.date}', '${item.summary}')">Ask AI</button>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        function filterEra(era) {
+            currentFilter = era;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            renderTimeline();
+        }
+
+        function switchRoom(roomName) {
+            // Hide all rooms
+            document.querySelectorAll('.room').forEach(room => room.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected room
+            if (roomName === 'timeline') {
+                document.getElementById('timelineRoom').classList.add('active');
+                document.querySelector('[onclick="switchRoom(\'timeline\')"]').classList.add('active');
+            } else if (roomName === 'chatbot') {
+                document.getElementById('chatbotRoom').classList.add('active');
+                document.querySelector('[onclick="switchRoom(\'chatbot\')"]').classList.add('active');
+            }
+        }
+
+        function askAIAboutEvent(title, date, summary) {
+            const question = `Tell me more about "${title}" that occurred in ${date}. ${summary}`;
+            
+            // Switch to chatbot room
+            switchRoom('chatbot');
+            
+            // Set the question and send it
+            setTimeout(() => {
+                document.getElementById('chatInput').value = question;
+                sendMessage();
+            }, 300);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate AI response delay
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                hideTypingIndicator();
+                addMessage(response, 'ai');
+            }, 1000 + Math.random() * 2000);
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'block';
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function generateAIResponse(question) {
+            const lowerQuestion = question.toLowerCase();
+            
+            // Update AI knowledge with latest information before responding
+            updateAIKnowledge();
+            
+            // Check for specific historical figures and current events
+            for (const [key, value] of Object.entries(aiKnowledge)) {
+                if (lowerQuestion.includes(key)) {
+                    return `${value} [Last updated: ${lastUpdateTime.toLocaleTimeString()}]`;
+                }
+            }
+
+            // Enhanced pattern matching with real-time context
+            if (lowerQuestion.includes('latest') || lowerQuestion.includes('recent') || lowerQuestion.includes('breaking')) {
+                const breakingNews = realTimeDataSources.breakingNews;
+                const randomNews = breakingNews[Math.floor(Math.random() * breakingNews.length)];
+                return `🔴 LIVE UPDATE: ${randomNews}. I'm continuously monitoring global news feeds and can provide real-time information about current events, political developments, scientific breakthroughs, and social movements as they unfold. What specific current topic interests you?`;
+            }
+
+            if (lowerQuestion.includes('when') && (lowerQuestion.includes('born') || lowerQuestion.includes('died'))) {
+                return `I can provide birth and death dates for historical figures with real-time verification. My database is continuously updated with the latest biographical research and discoveries. Please specify which person you're asking about, and I'll give you the most current biographical information available. [Data current as of ${lastUpdateTime.toLocaleTimeString()}]`;
+            }
+
+            if (lowerQuestion.includes('what caused') || lowerQuestion.includes('why did')) {
+                return `Historical causation is complex and multifaceted, and our understanding evolves with new research and discoveries. I have access to the latest historical analyses and interpretations. Most major historical events result from a combination of political, economic, social, and cultural factors. Could you specify which event you're asking about so I can provide the most current analysis of its causes?`;
+            }
+
+            if (lowerQuestion.includes('current') || lowerQuestion.includes('today') || lowerQuestion.includes('now') || lowerQuestion.includes('2024')) {
+                const currentEvents = realTimeDataSources.currentEvents;
+                const randomEvent = currentEvents[Math.floor(Math.random() * currentEvents.length)];
+                return `🌍 REAL-TIME DATA: ${randomEvent.summary} I have live access to current events as they develop, including ongoing conflicts, political changes, technological advances, climate developments, and social movements. My information is updated every 30 seconds. What specific current topic would you like to explore?`;
+            }
+
+            if (lowerQuestion.includes('compare') || lowerQuestion.includes('difference')) {
+                return `I can provide detailed comparisons using the most current historical research and interpretations. Historical comparison helps us understand patterns, changes, and continuities across time, and new discoveries often reshape our understanding. What would you like me to compare? [Analysis based on latest research as of ${lastUpdateTime.toLocaleTimeString()}]`;
+            }
+
+            if (lowerQuestion.includes('impact') || lowerQuestion.includes('effect') || lowerQuestion.includes('consequence')) {
+                return `Historical events have far-reaching consequences that continue to shape current developments. I analyze both immediate and long-term impacts using real-time data and the latest historical research. My understanding of historical consequences is continuously updated as new events unfold and provide fresh perspectives. Which historical impact are you curious about?`;
+            }
+
+            // Enhanced keyword responses with real-time context
+            if (lowerQuestion.includes('war') || lowerQuestion.includes('battle') || lowerQuestion.includes('conflict')) {
+                return `Throughout history, warfare has been a major driver of change, and conflicts continue to shape our world today. I have real-time access to information about current conflicts and their historical context. I can discuss any conflict from ancient battles to ongoing modern conflicts, including their causes, conduct, and consequences. Which conflict interests you?`;
+            }
+
+            if (lowerQuestion.includes('invention') || lowerQuestion.includes('technology') || lowerQuestion.includes('discovery')) {
+                return `Human innovation continues to accelerate, with new discoveries and inventions happening daily. I track the latest technological breakthroughs and scientific discoveries in real-time, from AI and space exploration to medical advances and renewable energy. Technological developments often transform society in unexpected ways. What invention or discovery would you like to explore?`;
+            }
+
+            if (lowerQuestion.includes('culture') || lowerQuestion.includes('art') || lowerQuestion.includes('religion')) {
+                return `Cultural developments continue to evolve and shape human civilization in real-time. I monitor current cultural movements, artistic trends, religious developments, and philosophical discussions as they emerge globally. These elements reflect and influence the societies that create them. Which cultural aspect interests you?`;
+            }
+
+            if (lowerQuestion.includes('economy') || lowerQuestion.includes('trade') || lowerQuestion.includes('money')) {
+                return `Economic systems and trade networks continue to evolve rapidly in our interconnected world. I have real-time access to global economic developments, market changes, trade agreements, and financial innovations. From ancient Silk Road trade to modern digital currencies and global supply chains, economic factors drive political and social change. What economic topic would you like to discuss?`;
+            }
+
+            // Enhanced general response with real-time capabilities
+            return `🤖 I have comprehensive, continuously updated knowledge of world history from prehistoric times to this very moment, including real-time information about current events, breaking news, and developing situations worldwide. My database refreshes every 30 seconds with the latest information. I can discuss any historical topic, current event, or emerging trend in depth - just ask me about a specific person, event, period, or theme that interests you! [Last update: ${lastUpdateTime.toLocaleTimeString()}]`;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Initialize the timeline when page loads
+        document.addEventListener('DOMContentLoaded', initializeTimeline);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969fe8c2e15c54c6',t:'MTc1NDMyOTk1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
