@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketVision Pro - Stock Prediction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .prediction-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect p-6 mb-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-white">MarketVision Pro</h1>
+            </div>
+            <div class="text-white text-sm">
+                <span class="pulse-animation">🟢 Live Market Data</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 pb-8">
+        <!-- Stock Input Section -->
+        <div class="prediction-card rounded-2xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                <span class="mr-3">🎯</span>
+                Stock Prediction Engine
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Stock Symbol</label>
+                    <input type="text" id="stockSymbol" placeholder="e.g., AAPL, TSLA, GOOGL" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Prediction Period</label>
+                    <select id="predictionPeriod" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <option value="1">1 Day</option>
+                        <option value="7">1 Week</option>
+                        <option value="30">1 Month</option>
+                        <option value="90">3 Months</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-end">
+                    <button onclick="generatePrediction()" 
+                            class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 neon-glow">
+                        🚀 Generate Prediction
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Main Chart -->
+            <div class="lg:col-span-2 prediction-card rounded-2xl p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <span class="mr-2">📈</span>
+                    Price Prediction Chart
+                </h3>
+                <div class="h-80">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Prediction Summary -->
+            <div class="space-y-6">
+                <!-- Current Price Card -->
+                <div class="prediction-card rounded-xl p-6 floating">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold text-gray-700">Current Price</h4>
+                        <span class="text-2xl">💰</span>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800" id="currentPrice">$0.00</div>
+                    <div class="text-sm text-gray-500 mt-1" id="currentChange">+0.00 (0.00%)</div>
+                </div>
+
+                <!-- Predicted Price Card -->
+                <div class="prediction-card rounded-xl p-6 floating" style="animation-delay: 0.5s">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold text-gray-700">Predicted Price</h4>
+                        <span class="text-2xl">🔮</span>
+                    </div>
+                    <div class="text-3xl font-bold text-green-600" id="predictedPrice">$0.00</div>
+                    <div class="text-sm text-gray-500 mt-1" id="predictedChange">+0.00 (0.00%)</div>
+                </div>
+
+                <!-- Confidence Score -->
+                <div class="prediction-card rounded-xl p-6 floating" style="animation-delay: 1s">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-semibold text-gray-700">Confidence Score</h4>
+                        <span class="text-2xl">⚡</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-1 bg-gray-200 rounded-full h-3 mr-3">
+                            <div class="bg-gradient-to-r from-yellow-400 to-green-500 h-3 rounded-full transition-all duration-1000" 
+                                 id="confidenceBar" style="width: 0%"></div>
+                        </div>
+                        <span class="text-lg font-semibold" id="confidenceScore">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Indicators -->
+        <div class="grid md:grid-cols-4 gap-6 mt-8">
+            <div class="prediction-card rounded-xl p-6 text-center">
+                <div class="text-3xl mb-2">📊</div>
+                <div class="text-sm text-gray-600 mb-1">Technical Analysis</div>
+                <div class="font-semibold text-lg" id="technicalSignal">NEUTRAL</div>
+            </div>
+            
+            <div class="prediction-card rounded-xl p-6 text-center">
+                <div class="text-3xl mb-2">🧠</div>
+                <div class="text-sm text-gray-600 mb-1">AI Sentiment</div>
+                <div class="font-semibold text-lg" id="aiSentiment">ANALYZING</div>
+            </div>
+            
+            <div class="prediction-card rounded-xl p-6 text-center">
+                <div class="text-3xl mb-2">📰</div>
+                <div class="text-sm text-gray-600 mb-1">News Impact</div>
+                <div class="font-semibold text-lg" id="newsImpact">MODERATE</div>
+            </div>
+            
+            <div class="prediction-card rounded-xl p-6 text-center">
+                <div class="text-3xl mb-2">🎲</div>
+                <div class="text-sm text-gray-600 mb-1">Risk Level</div>
+                <div class="font-semibold text-lg" id="riskLevel">MEDIUM</div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="glass-effect rounded-xl p-6 mt-8 text-center">
+            <p class="text-white text-sm">
+                ⚠️ <strong>Demo System:</strong> This is a demonstration of stock prediction interface design. 
+                Real predictions require actual market data and sophisticated algorithms. 
+                Never make investment decisions based on demo data.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+
+        function generatePrediction() {
+            const symbol = document.getElementById('stockSymbol').value.toUpperCase() || 'DEMO';
+            const period = document.getElementById('predictionPeriod').value;
+            
+            // Simulate loading
+            showLoading();
+            
+            setTimeout(() => {
+                // Generate realistic demo data
+                const currentPrice = Math.random() * 500 + 50;
+                const volatility = Math.random() * 0.1 + 0.02;
+                const trend = (Math.random() - 0.5) * 0.1;
+                
+                updatePriceData(currentPrice, volatility, trend, period);
+                updateChart(currentPrice, volatility, trend, period);
+                updateIndicators();
+                
+                hideLoading();
+            }, 2000);
+        }
+
+        function showLoading() {
+            document.getElementById('currentPrice').textContent = 'Loading...';
+            document.getElementById('predictedPrice').textContent = 'Analyzing...';
+            document.getElementById('confidenceScore').textContent = '...';
+        }
+
+        function hideLoading() {
+            // Animation complete
+        }
+
+        function updatePriceData(currentPrice, volatility, trend, period) {
+            const change = (Math.random() - 0.5) * currentPrice * 0.05;
+            const changePercent = (change / currentPrice) * 100;
+            
+            document.getElementById('currentPrice').textContent = `$${currentPrice.toFixed(2)}`;
+            document.getElementById('currentChange').textContent = 
+                `${change >= 0 ? '+' : ''}${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
+            document.getElementById('currentChange').className = 
+                `text-sm mt-1 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`;
+
+            const predictedPrice = currentPrice * (1 + trend + (Math.random() - 0.5) * volatility);
+            const predictedChange = predictedPrice - currentPrice;
+            const predictedPercent = (predictedChange / currentPrice) * 100;
+            
+            document.getElementById('predictedPrice').textContent = `$${predictedPrice.toFixed(2)}`;
+            document.getElementById('predictedChange').textContent = 
+                `${predictedChange >= 0 ? '+' : ''}${predictedChange.toFixed(2)} (${predictedPercent.toFixed(2)}%)`;
+            document.getElementById('predictedChange').className = 
+                `text-sm mt-1 ${predictedChange >= 0 ? 'text-green-600' : 'text-red-600'}`;
+
+            // Confidence score animation
+            const confidence = Math.random() * 40 + 60; // 60-100%
+            setTimeout(() => {
+                document.getElementById('confidenceBar').style.width = `${confidence}%`;
+                document.getElementById('confidenceScore').textContent = `${confidence.toFixed(0)}%`;
+            }, 500);
+        }
+
+        function updateChart(currentPrice, volatility, trend, period) {
+            const ctx = document.getElementById('predictionChart').getContext('2d');
+            
+            // Generate historical data
+            const historicalData = [];
+            const futureData = [];
+            const labels = [];
+            
+            let price = currentPrice * 0.9;
+            
+            // Historical data (30 points)
+            for (let i = -30; i < 0; i++) {
+                price += (Math.random() - 0.5) * price * volatility;
+                historicalData.push(price);
+                labels.push('');
+            }
+            
+            // Current price
+            historicalData.push(currentPrice);
+            labels.push('Now');
+            
+            // Future predictions
+            price = currentPrice;
+            for (let i = 1; i <= parseInt(period); i++) {
+                price += trend * price + (Math.random() - 0.5) * price * volatility;
+                futureData.push(price);
+                labels.push('');
+            }
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Historical Price',
+                        data: historicalData,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Predicted Price',
+                        data: [...Array(historicalData.length - 1).fill(null), currentPrice, ...futureData],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+
+        function updateIndicators() {
+            const signals = ['BULLISH', 'BEARISH', 'NEUTRAL'];
+            const sentiments = ['POSITIVE', 'NEGATIVE', 'NEUTRAL'];
+            const impacts = ['HIGH', 'MODERATE', 'LOW'];
+            const risks = ['HIGH', 'MEDIUM', 'LOW'];
+            
+            document.getElementById('technicalSignal').textContent = 
+                signals[Math.floor(Math.random() * signals.length)];
+            document.getElementById('aiSentiment').textContent = 
+                sentiments[Math.floor(Math.random() * sentiments.length)];
+            document.getElementById('newsImpact').textContent = 
+                impacts[Math.floor(Math.random() * impacts.length)];
+            document.getElementById('riskLevel').textContent = 
+                risks[Math.floor(Math.random() * risks.length)];
+        }
+
+        // Initialize with demo data
+        window.onload = function() {
+            document.getElementById('stockSymbol').value = 'AAPL';
+            generatePrediction();
+        };
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967fac9361e6551f',t:'MTc1Mzk5MTk0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
